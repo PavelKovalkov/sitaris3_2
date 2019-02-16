@@ -1,0 +1,7 @@
+# Build & runtime files
+**/target/
+*.log
+
+# IDEA project files
+.idea/
+*.iml
