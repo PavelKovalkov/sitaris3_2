@@ -3,6 +3,7 @@ package course.project.security;
 import course.project.dao.Admin;
 import course.project.repo.AdminRepo;
 import course.project.resource.Authority;
+import course.project.service.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,15 +16,17 @@ import java.util.Optional;
 
 public class AdminAuthenticationProvider implements AuthenticationProvider {
     private AdminRepo repo;
+    private PasswordEncoder encoder;
 
-    public AdminAuthenticationProvider(AdminRepo repo) {
+    public AdminAuthenticationProvider(AdminRepo repo, PasswordEncoder encoder) {
         this.repo = repo;
+        this.encoder = encoder;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String login = authentication.getPrincipal().toString();
-        String password = authentication.getCredentials().toString();
+        String password = encoder.encodePassword(authentication.getCredentials().toString());
         Optional<Admin> admin = repo.findByLoginAndPassword(login, password);
 
         if (admin.isPresent()) {

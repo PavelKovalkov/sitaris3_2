@@ -3,6 +3,8 @@ package course.project.security;
 import course.project.dao.User;
 import course.project.repo.UserRepo;
 import course.project.resource.Authority;
+import course.project.resource.UserPublicInfo;
+import course.project.service.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,22 +16,25 @@ import java.util.Optional;
 
 public class UserAuthenticationProvider implements AuthenticationProvider {
     private UserRepo repo;
+    private PasswordEncoder encoder;
 
-    public UserAuthenticationProvider(UserRepo repo) {
+    public UserAuthenticationProvider(UserRepo repo, PasswordEncoder encoder) {
         this.repo = repo;
+        this.encoder = encoder;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getPrincipal().toString();
-        String password = authentication.getCredentials().toString();
+        String password = encoder.encodePassword(authentication.getCredentials().toString());
         Optional<User> user = repo.findByEmailAndPassword(email, password);
 
         if (user.isPresent()) {
             List<Authority> authorities = new ArrayList<>();
             authorities.add(Authority.USER);
-
-            return new UsernamePasswordAuthenticationToken(email, password, authorities);
+            User currentUser = user.get();
+            UserPublicInfo userPublicInfo = new UserPublicInfo(currentUser.getEmail(), currentUser.getUsername());
+            return new UsernamePasswordAuthenticationToken(userPublicInfo, password, authorities);
         }
 
         return null;

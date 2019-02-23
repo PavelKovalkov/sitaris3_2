@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 public class WebSecurityConfig {
@@ -49,10 +50,13 @@ public class WebSecurityConfig {
     @Order(2)
     public static class UserSecurityConfig extends WebSecurityConfigurerAdapter {
         private final AuthenticationProvider authenticationProvider;
+        private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
         @Autowired
-        public UserSecurityConfig(@Qualifier("user_provider") AuthenticationProvider authenticationProvider) {
+        public UserSecurityConfig(@Qualifier("user_provider") AuthenticationProvider authenticationProvider,
+                                  AuthenticationSuccessHandler authenticationSuccessHandler) {
             this.authenticationProvider = authenticationProvider;
+            this.authenticationSuccessHandler = authenticationSuccessHandler;
         }
 
 
@@ -71,7 +75,7 @@ public class WebSecurityConfig {
                 .and()
                     .formLogin()
                     .loginPage("/user/login")
-                    .successHandler((request, response, authentication) -> response.sendRedirect("/user/home"))
+                    .successHandler(authenticationSuccessHandler)
                     .permitAll()
                 .and()
                     .logout()
