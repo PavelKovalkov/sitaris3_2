@@ -1,0 +1,43 @@
+package course.project.security;
+
+import course.project.dao.Admin;
+import course.project.repo.AdminRepo;
+import course.project.resource.Authority;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class AdminAuthenticationProvider implements AuthenticationProvider {
+    private AdminRepo repo;
+
+    public AdminAuthenticationProvider(AdminRepo repo) {
+        this.repo = repo;
+    }
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String login = authentication.getPrincipal().toString();
+        String password = authentication.getCredentials().toString();
+        Optional<Admin> admin = repo.findByLoginAndPassword(login, password);
+
+        if (admin.isPresent()) {
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(Authority.ADMIN);
+
+            return new UsernamePasswordAuthenticationToken(login, password, authorities);
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
+}
