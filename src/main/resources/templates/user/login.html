@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Sniglet');
+
+        body{
+            margin: 0;
+            padding: 0;
+            background-color: #F8F8F8;
+            font-family: 'Sniglet', cursive;
+        }
+        *{
+            outline:none;
+        }
+
+        .tabs { width: 50%; padding: 0; margin: 0 auto; }
+        .tabs>input { display:none; }
+        .tabs>div {
+            display: none;
+            padding: 12px;
+            border: 1px solid #C0C0C0;
+            background:#C1CDC1;
+        }
+        .tabs>label {
+            display: inline-block;
+            padding: 7px;
+            margin: 0 -5px -1px 0;
+            text-align: center;
+            color: #666666;
+            border: 1px solid #C0C0C0;
+            background: #C1CDC1;
+            cursor: pointer;
+        }
+        .tabs>input:checked + label {
+            color: #000000;
+            border: 1px solid #C0C0C0;
+            border-bottom: 1px solid #C1CDC1;
+            background: #C1CDC1;
+        }
+        #tab_1:checked ~ #txt_1,
+        #tab_2:checked ~ #txt_2 { display: block; }
+
+        #txt_1, #txt_2{
+            text-align: center;
+        }
+
+        #txt_1 input, #txt_2 input{
+            margin-bottom: 10px;
+            width: 260px;
+            height: 30px;
+        }
+        #txt_1 input[type="submit"], #txt_2 input[type="button"]{
+            width: 150px;
+            font-weight: 700;
+            color: white;
+            border: 0;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            background: rgb(64, 199, 129);
+            box-shadow: 0 -3px rgb(53,167,110) inset;
+            transition: 0.2s;
+            cursor: pointer;
+            height: 40px;
+        }
+        #txt_2 input[type="button"]{background-color:#999950;}
+        #txt_1 input[type="submit"]:hover{
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+
+    <div class="tabs">
+        <input type="radio" name="inset" value="" id="tab_1" checked onclick="signInTab()">
+        <label for="tab_1">Sign In</label>
+
+        <input type="radio" name="inset" value="" id="tab_2" onclick="signUpTab()">
+        <label for="tab_2">Sign Up</label>
+
+        <div id="txt_1">
+            <form th:action="@{/user/login}" method="post">
+                <h1>Sign In</h1>
+                <label><input type="email" id="sign-in-email" name="username" placeholder="Email"></label><br>
+                <label><input type="password" id="sign-in-psw" name="password" placeholder="Password"></label><br>
+                <input type="submit" id="button-in" value="Sign In">
+            </form>
+            <div id="signInError" style="display: none">
+                Incorrect email or password.
+            </div>
+        </div>
+
+        <div id="txt_2">
+            <h1>Sign Up</h1>
+            <label><input type="email" id="sign-up-email" placeholder="Email"></label><br>
+            <label><input type="text" id="sign-up-login" placeholder="Username"></label><br>
+            <label><input type="password" id="sign-up-psw" placeholder="Password"></label><br>
+            <input type="button" id="button-up" value="Sign Up" onclick="signUp()">
+            <div id="signUpError" style="display: none">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        var strGET = window.location.search.replace('?', '');
+
+        if (strGET === 'error') {
+            $("#signInError").css('display', 'block');
+        }
+    });
+
+    function signUp() {
+        var userInfo = {
+            "email": $('#sign-up-email').val(),
+            "username": $('#sign-up-login').val(),
+            "password": $('#sign-up-psw').val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/registration",
+            contentType: "application/json",
+            data: JSON.stringify(userInfo),
+            success: function () {
+                location.reload();
+            },
+            error: function (error) {
+                $("#signUpError").text(error.responseText);
+                $("#signUpError").css('display', 'block');
+            }
+        });
+    }
+
+    function signUpTab() {
+        $("#signUpError").css('display', 'none');
+        $('#sign-up-email').val('');
+        $('#sign-up-login').val('');
+        $('#sign-up-psw').val('');
+    }
+
+    function signInTab() {
+        $("#signInError").css('display', 'none');
+        $('#sign-in-email').val('');
+        $('#sign-in-psw').val('')
+    }
+</script>
+</body>
+</html>
