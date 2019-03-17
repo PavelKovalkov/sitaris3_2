@@ -1,6 +1,6 @@
 package course.project.controller;
 
-import course.project.dao.User;
+import course.project.entity.User;
 import course.project.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class UserRegistrationController {
         this.userRegistrationService = userRegistrationService;
     }
 
-    @PostMapping("/user/registration")
+    @PostMapping("/registration")
     public String registerUser(@RequestBody @Valid User user) {
         userRegistrationService.registerUser(user);
         return "user/login";

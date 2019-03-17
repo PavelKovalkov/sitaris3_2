@@ -1,6 +1,6 @@
 package course.project.service.impl;
 
-import course.project.dao.User;
+import course.project.entity.User;
 import course.project.exception.UserAlreadyExistException;
 import course.project.repo.UserRepo;
 import course.project.service.PasswordEncoder;
@@ -31,9 +31,9 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
         }
 
         User newUser = new User();
-        user.setEmail(user.getEmail());
-        user.setPassword(encoder.encodePassword(user.getPassword()));
-        user.setUsername(user.getUsername());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(encoder.encodePassword(user.getPassword()));
+        newUser.setUsername(user.getUsername());
 
         repo.save(newUser);
     }

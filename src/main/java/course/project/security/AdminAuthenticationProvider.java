@@ -1,6 +1,6 @@
 package course.project.security;
 
-import course.project.dao.Admin;
+import course.project.entity.Admin;
 import course.project.repo.AdminRepo;
 import course.project.resource.Authority;
 import course.project.service.PasswordEncoder;

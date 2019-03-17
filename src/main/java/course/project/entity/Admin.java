@@ -1,4 +1,4 @@
-package course.project.dao;
+package course.project.entity;
 
 import lombok.Getter;
 import lombok.Setter;

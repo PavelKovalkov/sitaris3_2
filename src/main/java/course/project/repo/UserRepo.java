@@ -1,6 +1,6 @@
 package course.project.repo;
 
-import course.project.dao.User;
+import course.project.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

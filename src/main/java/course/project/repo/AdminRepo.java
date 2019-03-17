@@ -1,6 +1,6 @@
 package course.project.repo;
 
-import course.project.dao.Admin;
+import course.project.entity.Admin;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

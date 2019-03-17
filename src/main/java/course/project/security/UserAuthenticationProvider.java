@@ -1,6 +1,6 @@
 package course.project.security;
 
-import course.project.dao.User;
+import course.project.entity.User;
 import course.project.repo.UserRepo;
 import course.project.resource.Authority;
 import course.project.resource.UserPublicInfo;
