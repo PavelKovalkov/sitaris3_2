@@ -69,7 +69,7 @@ public class WebSecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .antMatcher("/user/**").authorizeRequests()
-                    .antMatchers("/user/home").hasAuthority(Authority.USER.getAuthority())
+                    .antMatchers("/user/**").hasAuthority(Authority.USER.getAuthority())
                     .anyRequest().permitAll()
                 .and()
                     .formLogin()
