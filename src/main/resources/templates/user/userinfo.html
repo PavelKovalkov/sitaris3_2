@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<a href="http://localhost:8080/user/home">На главную</a>
+<form th:action="@{/user/logout}" method="post">
+    <button type="submit">Выход</button>
+</form>
+<!-- Вот это должно быть содержимое всплывающего окошка-->
+<input type="text" id="oldPassword" placeholder="введите старый пароль"/>
+<input type="text" id="newPassword" placeholder="введите новый пароль"/>
+<input type="text" id="repeatedNewPassword" placeholder="повторите новый пароль"/>
+<input type="button" value="Сменить пароль" onclick="changePassword()"/>
+<!--Надо добавить кнопку тип Сменить пароль при нажатии всплывает окошко -->
+<input type="button" value="Список действительных билетов" onclick="getNotUsedTickets()"/>
+<table border="1" id="tb" style="display: none">
+    <tr>
+        <th>Номер рейса</th>
+        <th>Номер автобуса</th>
+        <th>Станция отправления</th>
+        <th>Дата отправления</th>
+        <th>Время отправления</th>
+        <th>Станция прибытия</th>
+        <th>Дата прибытия</th>
+        <th>Время прибытия</th>
+        <th>Время в пути</th>
+        <th>Стоимость билета</th>
+        <th>ФИО</th>
+        <th>Номер пасспорта</th>
+    </tr>
+</table>
+<script th:inline="javascript">
+    function changePassword() {
+        var oldPassword = $("#oldPassword").val();
+        var newPassword = $("#newPassword").val();
+        var repeatedNewPassword = $("#repeatedNewPassword").val();
+
+        if (oldPassword === "" && newPassword === "" && repeatedNewPassword === "") {
+            alert("Введите все поля");
+            return;
+        }
+
+        if (newPassword != repeatedNewPassword) {
+            alert("Повторный ввод пароля не верный");
+            return;
+        }
+
+        var requestBody = {
+            "old_password": oldPassword,
+            "new_password": newPassword
+        };
+
+        var token = [[${_csrf.token}]];
+        var header = [[${_csrf.headerName}]];
+
+        $.ajax({
+            type: "POST",
+            url: "/user/change-password",
+            contentType: "application/json",
+            data: JSON.stringify(requestBody),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                alert("Успешно");
+            }, error: function (error) {
+                alert("Ошибка");
+            }
+        });
+    }
+
+    function getNotUsedTickets() {
+        $.ajax({
+            type: "GET",
+            url: "/user/bus-trip/get-not-used-tickets",
+            dataType: 'json',
+            success: function (data) {
+                if (data.length === 0) {
+                    alert("Нет результата поиска");
+                    return;
+                }
+
+                $.each(data, function (index, ticket) {
+                    $("#tb").append('<tr>\
+                        <td>' + ticket.busTrip.id + '</td>\
+                        <td><a href="http://localhost:8080/user/bus-trip/bus-info/' + ticket.busTrip.bus + '">' + ticket.busTrip.bus + '</td>\
+                        <td>' + ticket.busTrip.departureStation + '</td>\
+                        <td>' + ticket.busTrip.departureDate + '</td>\
+                        <td>' + ticket.busTrip.departureTime + '</td>\
+                        <td>' + ticket.busTrip.arrivalStation + '</td>\
+                        <td>' + ticket.busTrip.arrivalDate + '</td>\
+                        <td>' + ticket.busTrip.arrivalTime + '</td>\
+                        <td>' + ticket.busTrip.travelTime + '</td>\
+                        <td>' + ticket.busTrip.ticketPrice + '</td>\
+                        <td>' + ticket.userName + ' ' +ticket.userSurname + ' ' + ticket.userPatronymic + '</td>\
+                        <td>' + ticket.passportId + '</td>\
+                            </tr>');
+                });
+                $("#tb").css({"display": "table"});
+            }
+        });
+    }
+</script>
+</body>
+</html>

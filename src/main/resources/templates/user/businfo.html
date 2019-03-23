@@ -6,6 +6,9 @@
 </head>
 <body>
 <a href="http://localhost:8080/user/home">На главную</a>
+<form th:action="@{/user/logout}" method="post">
+    <button type="submit">Выход</button>
+</form>
 <div th:text="${bus.id}">
 </div>
 <div th:text="${bus.model}">
