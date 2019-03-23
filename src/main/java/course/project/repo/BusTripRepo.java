@@ -11,9 +11,11 @@ import java.util.Optional;
 @Repository
 public interface BusTripRepo extends CrudRepository<BusTrip, Long> {
 
-    Optional<BusTrip> findById(String id);
+    boolean existsById(String id);
 
-    void deleteAllByDepartureDateBefore(Date date);
+    void deleteById(String id);
+
+    Optional<BusTrip> findById(String id);
 
     Collection<BusTrip> findAllByDepartureDateAndDepartureStationAndArrivalStation(Date date,
                                                                                    String departureStation,

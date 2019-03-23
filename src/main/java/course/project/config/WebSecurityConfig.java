@@ -32,7 +32,7 @@ public class WebSecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .antMatcher("/admin/**").authorizeRequests()
-                    .antMatchers("/admin/home").hasAuthority(Authority.ADMIN.getAuthority())
+                    .antMatchers("/admin/**").hasAuthority(Authority.ADMIN.getAuthority())
                     .anyRequest().permitAll()
                 .and()
                     .formLogin()
