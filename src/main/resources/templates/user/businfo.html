@@ -2,13 +2,128 @@
 <html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Инфо</title>
+    <style>
+    	 @import url('https://fonts.googleapis.com/css?family=Sniglet');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Sniglet', cursive;
+        }
+
+        * {
+            outline: none;
+        }
+
+        header {
+            width: 100%;
+            height: 70px;
+            background-color: #C1CDC1;
+            color: #fff;
+            position: fixed;
+            top: 0;
+        }
+
+         .links {
+            float: right;
+            margin-top: 20px;
+        }
+
+        ul {
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+            display: inline-block;
+            margin-left: 15px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        a:hover {
+            margin-bottom: 3px;
+            border-bottom: 1px solid #fff;
+        }
+
+        #log-out {
+            width: 70px;
+            font-weight: 700;
+            color: white;
+            border: 0;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            background: rgb(64, 199, 129);
+            box-shadow: 0 -3px rgb(53, 167, 110) inset;
+            transition: 0.2s;
+            cursor: pointer;
+            height: 40px;
+        }
+
+         #log-out{
+        	margin-right: 15px;
+        	margin-top: -15px;
+        }
+
+        #log-out:hover{
+        	color:#fff;
+        	background-color:grey;
+        }
+
+         #content {
+            width: 100%;
+            height: 1000px;
+            padding-top: 70px;
+        }
+
+         .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #content div{
+           margin-top: 20px;
+           text-align: justify;
+           padding:15px;
+        }
+        
+         footer {
+            width: 100%;
+            height: 70px;
+            background-color: #C1CDC1;
+            color: #fff;
+            text-align: center;
+        }
+
+        footer h1 {
+            margin: 0;
+            line-height: 2.2em;
+        }
+    </style>
 </head>
 <body>
-<a href="http://localhost:8080/user/home">На главную</a>
-<form th:action="@{/user/logout}" method="post">
-    <button type="submit">Выход</button>
-</form>
+	<header>
+		 <div class="links">
+            <ul>
+                <li><a href="http://localhost:8080/user/home">На главную</a></li>
+                <li>
+                    <form th:action="@{/user/logout}" method="post">
+                        <button type="submit" id="log-out">Выход</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+	</header>
+
+<section id="content">
+
+<div class="container">
+
 <div th:text="${bus.id}">
 </div>
 <div th:text="${bus.model}">
@@ -17,5 +132,14 @@
 </div>
 <div th:text="${bus.mileage}">
 </div>
+	
+</div>
+
+</section>
+
+<footer>
+	<h1>&#169; All rights are reserved</h1>
+</footer>
+
 </body>
 </html>
