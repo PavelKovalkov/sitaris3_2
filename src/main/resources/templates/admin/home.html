@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<!-- Кнопка при нажатии всплывает окошко для добавления -->
+<div>
+<input type="button" value="Добавить автобус">
+</div>
+<!-- Кнопка при нажатии всплывает окошко для удаления -->
+<div>
+<input type="button" value="Удалить автобус">
+</div>
+<!-- Кнопка при нажатии всплывает окошко для редактирования -->
+<div>
+<input type="button" value="Редактировать автобус"/>
+</div>
+
+<!-- Содержимое всплывающего окошка для удаления-->
+<div>
+<input type="text" id="busIdForRemoving" placeholder="Номер автобуса"/>
+<input type="button" onclick="removeBus()" value="Удалить"/>
+</div>
+
+<!-- Содержимое всплывающего окошка для добавления -->
+<div>
+<input type="text" id="busIdForSaving" placeholder="Номер автобуса"/>
+<input type="text" id="busModelForSaving" placeholder="Модель автобуса"/>
+<input type="text" id="busCreationYearForSaving" placeholder="год выпуска"/>
+<input type="text" id="busMileageForSaving" placeholder="Пробег"/>
+<input type="button" onclick="saveBus()" value="Добавить"/>
+</div>
+
+<!-- Окошко для редактирования, где надо выбрать номер автобуса для редактирования
+Далее всплывет новое окошко, где будет актуальная информация о автобусе-->
+<div>
+<input type="text" id="selectBusId" placeholder="номер автобуса для редактирования">
+<input type="button" onclick="getBusInfo()" value="Выбрать">
+</div>
+
+<!--  Финальное окошко для редактирования  -->
+<div>
+<input type="text" id="busIdForEditing" placeholder="Номер автобуса" readonly/>
+<input type="text" id="busModelForEditing" placeholder="Модель автобуса"/>
+<input type="text" id="busCreationYearForEditing" placeholder="год выпуска"/>
+<input type="text" id="busMileageForEditing" placeholder="Пробег"/>
+<input type="button" onclick="updateBus()" value="Редактировать"/>
+</div>
+
+<div>
+<input type="text" id="busTripIdForSaving" placeholder="Номер рейса"/>
+<input type="text" id="busTripBusIdForSaving" placeholder="Номер автобуса"/>
+<input type="text" id="busTripDepartureStationForSaving" placeholder="станция отправления"/>
+<input type="text" id="busTripArrivalStationForSaving" placeholder="станция прибытия"/>
+<input type="text" id="busTripDepartureDateForSaving" placeholder="дата отправления (yyyy-MM-dd)"/>
+<input type="text" id="busTripArrivalDateForSaving" placeholder="дата прибытия(yyyy-MM-dd)"/>
+<input type="text" id="busTripDepartureTimeForSaving" placeholder="время отправления"/>
+<input type="text" id="busTripArrivalTimeForSaving" placeholder="время прибытия"/>
+<input type="text" id="busTripTravelTimeForSaving" placeholder="время в пути"/>
+<input type="text" id="busTripTicketCountForSaving" placeholder="количество билетов"/>
+<input type="text" id="busTripTicketPriceForSaving" placeholder="цена билета"/>
+<input type="button" onclick="saveBusTrip()" value="Добавить"/>
+</div>
+
+<div>
+    <input type="text" id="selectBusTripId" placeholder="номер рейса для редактирования">
+    <input type="button" onclick="getBusTripInfo()" value="Выбрать">
+</div>
+
+<div>
+    <input type="text" id="busTripIdForEditing" placeholder="Номер рейса" readonly/>
+    <input type="text" id="busTripBusIdForEditing" placeholder="Номер автобуса"/>
+    <input type="text" id="busTripDepartureStationForEditing" placeholder="станция отправления"/>
+    <input type="text" id="busTripArrivalStationForEditing" placeholder="станция прибытия"/>
+    <input type="text" id="busTripDepartureDateForEditing" placeholder="дата отправления (yyyy-MM-dd)"/>
+    <input type="text" id="busTripArrivalDateForEditing" placeholder="дата прибытия(yyyy-MM-dd)"/>
+    <input type="text" id="busTripDepartureTimeForEditing" placeholder="время отправления"/>
+    <input type="text" id="busTripArrivalTimeForEditing" placeholder="время прибытия"/>
+    <input type="text" id="busTripTravelTimeForEditing" placeholder="время в пути"/>
+    <input type="text" id="busTripTicketCountForEditing" placeholder="количество билетов"/>
+    <input type="text" id="busTripTicketPriceForEditing" placeholder="цена билета"/>
+    <input type="button" onclick="updateBusTrip()" value="Отредактировать"/>
+</div>
+
+<!--<div>-->
+    <!--<input type="text" id="busTripIdForRemoving" placeholder="Номер рейса"/>-->
+    <!--<input type="button" onclick="removeBusTrip()" value="Удалить"/>-->
+<!--</div>-->
+
+<script th:inline="javascript">
+    const token = [[${_csrf.token}]];
+    const header = [[${_csrf.headerName}]];
+
+    function getBusTripInfo() {
+        var busTripId = $("#selectBusTripId").val();
+        if (busTripId === "") {
+            alert("Номер рейса не может быть пустым");
+            return;
+        }
+
+        var url = "/admin/bus-trip/get-info/" + busTripId;
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            success: function (data) {
+                $("#busTripIdForEditing").val(data.id);
+                $("#busTripBusIdForEditing").val(data.bus);
+                $("#busTripDepartureStationForEditing").val(data.departureStation);
+                $("#busTripArrivalStationForEditing").val(data.arrivalStation);
+                $("#busTripDepartureTimeForEditing").val(data.departureTime);
+                $("#busTripArrivalTimeForEditing").val(data.arrivalTime);
+                $("#busTripDepartureDateForEditing").val(data.departureDate);
+                $("#busTripArrivalDateForEditing").val(data.arrivalDate);
+                $("#busTripTravelTimeForEditing").val(data.travelTime);
+                $("#busTripTicketCountForEditing").val(data.totalTicketCount);
+                $("#busTripTicketPriceForEditing").val(data.ticketPrice);
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    }
+
+    function updateBusTrip() {
+        var id = $("#busTripIdForEditing");
+        var busId = $("#busTripBusIdForEditing");
+        var departureStation = $("#busTripDepartureStationForEditing");
+        var arrivalStation = $("#busTripArrivalStationForEditing");
+        var departureTime = $("#busTripDepartureTimeForEditing");
+        var arrivalTime = $("#busTripArrivalTimeForEditing");
+        var departureDate = $("#busTripDepartureDateForEditing");
+        var arrivalDate = $("#busTripArrivalDateForEditing");
+        var travelTime = $("#busTripTravelTimeForEditing");
+        var ticketCount = $("#busTripTicketCountForEditing");
+        var ticketPrice = $("#busTripTicketPriceForEditing");
+        if (id.val() === "" || busId.val() === "" || departureStation.val() === "" || arrivalStation.val() === ""
+            || departureTime.val() === "" || arrivalTime.val() === "" || departureDate.val() === "" || arrivalDate.val() === ""
+            || travelTime.val() === "" || ticketCount.val() === "" || ticketPrice.val() === "") {
+            alert("Заполните все поля");
+            return;
+        }
+
+        var busTrip = {
+            "id": id.val(),
+            "bus": busId.val(),
+            "departureStation": departureStation.val(),
+            "arrivalStation": arrivalStation.val(),
+            "departureDate": departureDate.val(),
+            "arrivalDate": arrivalDate.val(),
+            "departureTime": departureTime.val(),
+            "arrivalTime": arrivalTime.val(),
+            "travelTime": travelTime.val(),
+            "totalTicketCount": ticketCount.val(),
+            "ticketPrice": ticketPrice.val()
+        };
+        $.ajax({
+            type: "POST",
+            url: "/admin/bus-trip/update",
+            contentType: "application/json",
+            data: JSON.stringify(busTrip),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                id.val('');
+                busId.val('');
+                departureStation.val('');
+                arrivalStation.val('');
+                departureDate.val('');
+                arrivalDate.val('');
+                departureTime.val('');
+                arrivalTime.val('');
+                travelTime.val('');
+                ticketCount.val('');
+                ticketPrice.val('');
+                alert("Отредактированно");
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    }
+
+    function saveBusTrip() {
+        var id = $("#busTripIdForSaving");
+        var busId = $("#busTripBusIdForSaving");
+        var departureStation = $("#busTripDepartureStationForSaving");
+        var arrivalStation = $("#busTripArrivalStationForSaving");
+        var departureTime = $("#busTripDepartureTimeForSaving");
+        var arrivalTime = $("#busTripArrivalTimeForSaving");
+        var departureDate = $("#busTripDepartureDateForSaving");
+        var arrivalDate = $("#busTripArrivalDateForSaving");
+        var travelTime = $("#busTripTravelTimeForSaving");
+        var ticketCount = $("#busTripTicketCountForSaving");
+        var ticketPrice = $("#busTripTicketPriceForSaving");
+        if (id.val() === "" || busId.val() === "" || departureStation.val() === "" || arrivalStation.val() === ""
+            || departureTime.val() === "" || arrivalTime.val() === "" || departureDate.val() === "" || arrivalDate.val() === ""
+            || travelTime.val() === "" || ticketCount.val() === "" || ticketPrice.val() === "") {
+            alert("Заполните все поля");
+            return;
+        }
+
+        var busTrip = {
+            "id": id.val(),
+            "bus": busId.val(),
+            "departureStation": departureStation.val(),
+            "arrivalStation": arrivalStation.val(),
+            "departureDate": departureDate.val(),
+            "arrivalDate": arrivalDate.val(),
+            "departureTime": departureTime.val(),
+            "arrivalTime": arrivalTime.val(),
+            "travelTime": travelTime.val(),
+            "totalTicketCount": ticketCount.val(),
+            "ticketPrice": ticketPrice.val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/bus-trip/save",
+            contentType: "application/json",
+            data: JSON.stringify(busTrip),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                id.val('');
+                busId.val('');
+                departureStation.val('');
+                arrivalStation.val('');
+                departureDate.val('');
+                arrivalDate.val('');
+                departureTime.val('');
+                arrivalTime.val('');
+                travelTime.val('');
+                ticketCount.val('');
+                ticketPrice.val('');
+                alert("Сохранено");
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    }
+
+    function removeBusTrip() {
+        var busId = $("#busTripIdForRemoving").val();
+        if (busId === "") {
+            alert("Номер рейса не может быть пустым");
+            return;
+        }
+
+
+        var url = "/admin/bus-trip/delete?id=" + busId;
+
+        $.ajax({
+            method: "DELETE",
+            url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                $("#busTripIdForRemoving").val('');
+                alert("Удалено");
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    }
+
+    function updateBus() {
+        var id = $("#busIdForEditing").val();
+        var model = $("#busModelForEditing").val();
+        var creationYear = $("#busCreationYearForEditing").val();
+        var mileage = $("#busMileageForEditing").val();
+
+        if (id === "" || model === "" || creationYear === "" || mileage === "") {
+            alert("Заполните все поля");
+            return;
+        }
+
+        var bus = {
+            "id": id,
+            "model": model,
+            "creationYear": creationYear,
+            "mileage": mileage
+        };
+
+        $.ajax({
+            type: "PUT",
+            url: "/admin/bus/update",
+            contentType: "application/json",
+            data: JSON.stringify(bus),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                $("#busIdForEditing").val('');
+                $("#busModelForEditing").val('');
+                $("#busCreationYearForEditing").val('');
+                $("#busMileageForEditing").val('');
+                alert("Обновлено");
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+
+    }
+
+    function getBusInfo() {
+        var busId = $("#selectBusId").val();
+        if (busId === "") {
+            alert("Номер автобуса не может быть пустым");
+            return;
+        }
+
+        var url = "/admin/bus/get-info/" + busId;
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            success: function (data) {
+                $("#busIdForEditing").val(data.id);
+                $("#busModelForEditing").val(data.model);
+                $("#busCreationYearForEditing").val(data.creationYear);
+                $("#busMileageForEditing").val(data.mileage);
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    }
+
+    function removeBus() {
+        var busId = $("#busIdForRemoving").val();
+        if (busId === "") {
+            alert("Номер автобуса не может быть пустым");
+            return;
+        }
+
+
+        var url = "/admin/bus/delete?id=" + busId;
+
+        $.ajax({
+            method: "DELETE",
+            url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                $("#busIdForRemoving").val('');
+                alert("Удалено");
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    }
+
+    function saveBus() {
+        var id = $("#busIdForSaving").val();
+        var model = $("#busModelForSaving").val();
+        var creationYear = $("#busCreationYearForSaving").val();
+        var mileage = $("#busMileageForSaving").val();
+
+        if (id === "" || model === "" || creationYear === "" || mileage === "") {
+            alert("ЗАполните все поля");
+            return;
+        }
+
+        var bus = {
+            "id": id,
+            "model": model,
+            "creationYear": creationYear,
+            "mileage": mileage
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/bus/save",
+            contentType: "application/json",
+            data: JSON.stringify(bus),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                $("#busIdForSaving").val('');
+                $("#busModelForSaving").val('');
+                $("#busCreationYearForSaving").val('');
+                $("#busMileageForSaving").val('');
+                alert("Сохранено");
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    }
+</script>
+</body>
+</html>
