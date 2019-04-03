@@ -1,8 +1,9 @@
 package course.project.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import course.project.serializer.BusSerializer;
+import course.project.json.deserializer.BusTripDeserializer;
+import course.project.json.serializer.BusSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.sql.Date;
 @Table(name = "app_bus_trips")
 @Getter
 @Setter
+@JsonDeserialize(using = BusTripDeserializer.class)
 public class BusTrip {
     @Id
     private String id;
@@ -27,7 +29,6 @@ public class BusTrip {
     private Date arrivalDate;
     private String arrivalTime;
     private String arrivalStation;
-    @JsonIgnore
     private int totalTicketCount;
     private int availableTicketCount;
     private String ticketPrice;

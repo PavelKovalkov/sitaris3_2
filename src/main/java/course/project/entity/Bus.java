@@ -1,5 +1,6 @@
 package course.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ public class Bus {
     private String creationYear;
     private double mileage;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "bus", fetch = FetchType.EAGER)
     private Collection<BusTrip> busTrips;
 }

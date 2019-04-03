@@ -3,11 +3,10 @@ package course.project.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 
 @Entity
 @Table(name = "app_users")
@@ -22,4 +21,6 @@ public class User {
     private String username;
     @NotBlank
     private String password;
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    private Collection<Ticket> tickets;
 }
