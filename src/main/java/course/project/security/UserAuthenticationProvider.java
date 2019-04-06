@@ -5,19 +5,25 @@ import course.project.repo.UserRepo;
 import course.project.resource.Authority;
 import course.project.resource.UserPublicInfo;
 import course.project.service.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
+@Qualifier("user_provider")
 public class UserAuthenticationProvider implements AuthenticationProvider {
     private UserRepo repo;
     private PasswordEncoder encoder;
 
+    @Autowired
     public UserAuthenticationProvider(UserRepo repo, PasswordEncoder encoder) {
         this.repo = repo;
         this.encoder = encoder;

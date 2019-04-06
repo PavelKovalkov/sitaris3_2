@@ -14,12 +14,12 @@ import java.util.Collection;
 @Setter
 public class User {
     @Id
-    @NotBlank
-    @Email
+    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Email должен быть корректным")
     private String email;
-    @NotBlank
+    @NotBlank(message = "Имя пользователя не может быть пустым")
     private String username;
-    @NotBlank
+    @NotBlank(message = "Пароль не может быть пустым")
     private String password;
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private Collection<Ticket> tickets;
