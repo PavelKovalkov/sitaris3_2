@@ -9,47 +9,79 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component
 public class DefaultUserManagmentService implements UserManagmentService {
     private final PasswordEncoder encoder;
     private final UserRepo repo;
-
+    private final Lock readLock;
+    private final Lock writeLock;
 
     @Autowired
     public DefaultUserManagmentService(PasswordEncoder encoder, UserRepo repo) {
         this.encoder = encoder;
         this.repo = repo;
+        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+        readLock = reentrantReadWriteLock.readLock();
+        writeLock = reentrantReadWriteLock.writeLock();
     }
 
     @Override
     public void registerUser(User user) {
-        Optional<User> dbUser = repo.findByEmail(user.getEmail());
+        try {
+            writeLock.lock();
+            Optional<User> dbUser = repo.findByEmail(user.getEmail());
 
-        if (dbUser.isPresent()) {
-            throw new UserAlreadyExistException();
+            if (dbUser.isPresent()) {
+                throw new UserAlreadyExistException();
+            }
+
+            User newUser = new User();
+            newUser.setEmail(user.getEmail());
+            newUser.setPassword(encoder.encodePassword(user.getPassword()));
+            newUser.setUsername(user.getUsername());
+
+            repo.save(newUser);
+
+        } finally {
+            writeLock.unlock();
         }
-
-        User newUser = new User();
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(encoder.encodePassword(user.getPassword()));
-        newUser.setUsername(user.getUsername());
-
-        repo.save(newUser);
     }
 
     @Override
     public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = repo.findByEmail(email).orElseThrow(RuntimeException::new);
+        try {
+            writeLock.lock();
 
-        String encodedOldPassword = encoder.encodePassword(oldPassword);
+            User user = repo.findByEmail(email).orElseThrow(RuntimeException::new);
 
-        if (!user.getPassword().equals(encodedOldPassword)) {
-            throw new RuntimeException();
+            String encodedOldPassword = encoder.encodePassword(oldPassword);
+
+            if (!user.getPassword().equals(encodedOldPassword)) {
+                throw new RuntimeException();
+            }
+
+            String encodedNewPassword = encoder.encodePassword(newPassword);
+            user.setPassword(encodedNewPassword);
+            repo.save(user);
+
+        } finally {
+            writeLock.unlock();
         }
+    }
 
-        String encodedNewPassword = encoder.encodePassword(newPassword);
-        user.setPassword(encodedNewPassword);
-        repo.save(user);
+    @Override
+    public Optional<User> findUserByEmailAndPassword(String email, String password) {
+        try {
+            readLock.lock();
+
+            String encodedPassword = encoder.encodePassword(password);
+            return repo.findByEmailAndPassword(email, encodedPassword);
+
+        } finally {
+            readLock.unlock();
+        }
     }
 }

@@ -1,10 +1,9 @@
 package course.project.security;
 
 import course.project.entity.User;
-import course.project.repo.UserRepo;
 import course.project.resource.Authority;
 import course.project.resource.UserPublicInfo;
-import course.project.service.PasswordEncoder;
+import course.project.service.UserManagmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,20 +19,18 @@ import java.util.Optional;
 @Component
 @Qualifier("user_provider")
 public class UserAuthenticationProvider implements AuthenticationProvider {
-    private UserRepo repo;
-    private PasswordEncoder encoder;
+    private final UserManagmentService userManagmentService;
 
     @Autowired
-    public UserAuthenticationProvider(UserRepo repo, PasswordEncoder encoder) {
-        this.repo = repo;
-        this.encoder = encoder;
+    public UserAuthenticationProvider(UserManagmentService userManagmentService) {
+        this.userManagmentService = userManagmentService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getPrincipal().toString();
-        String password = encoder.encodePassword(authentication.getCredentials().toString());
-        Optional<User> user = repo.findByEmailAndPassword(email, password);
+        String password = authentication.getCredentials().toString();
+        Optional<User> user = userManagmentService.findUserByEmailAndPassword(email, password);
 
         if (user.isPresent()) {
             List<Authority> authorities = new ArrayList<>();

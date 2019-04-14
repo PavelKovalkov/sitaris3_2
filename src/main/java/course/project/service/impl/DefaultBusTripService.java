@@ -12,64 +12,104 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.Collection;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 @Service
 public class DefaultBusTripService implements BusTripService {
     private final BusTripRepo busTripRepo;
     private final BusRepo busRepo;
+    private final Lock readLock;
+    private final Lock writeLock;
 
     @Autowired
     public DefaultBusTripService(BusTripRepo busTripRepo, BusRepo busRepo) {
         this.busTripRepo = busTripRepo;
         this.busRepo = busRepo;
+        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+        readLock = reentrantReadWriteLock.readLock();
+        writeLock = reentrantReadWriteLock.writeLock();
     }
 
     @Override
     public BusTrip getBusTripInfo(String busTripId) {
-        return busTripRepo.findById(busTripId).orElseThrow(RuntimeException::new);
+        try {
+            readLock.lock();
+            return busTripRepo.findById(busTripId).orElseThrow(RuntimeException::new);
+
+        } finally {
+            readLock.unlock();
+        }
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveBusTrip(BusTrip busTrip) {
-        if (busTripRepo.existsById(busTrip.getId())) {
-            throw new RuntimeException("Уже существует");
-        }
+        try {
+            writeLock.lock();
+            if (busTripRepo.existsById(busTrip.getId())) {
+                throw new RuntimeException("Уже существует");
+            }
 
-        if (!busRepo.existsById(busTrip.getBus().getId())) {
-            throw new RuntimeException("Автобуса с данным номером не существует");
+            if (!busRepo.existsById(busTrip.getBus().getId())) {
+                throw new RuntimeException("Автобуса с данным номером не существует");
+            }
+            busTripRepo.save(busTrip);
+
+        } finally {
+            writeLock.unlock();
         }
-        busTripRepo.save(busTrip);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateBusTrip(BusTrip busTrip) {
-        if (!busTripRepo.existsById(busTrip.getId())) {
-            throw new RuntimeException("Не существует");
-        }
+        try {
+            writeLock.lock();
 
-        Bus bus = busRepo.findById(busTrip.getBus().getId()).orElseThrow(RuntimeException::new);
-        busTrip.setBus(bus);
-        busTripRepo.save(busTrip);
+            if (!busTripRepo.existsById(busTrip.getId())) {
+                throw new RuntimeException("Не существует");
+            }
+
+            Bus bus = busRepo.findById(busTrip.getBus().getId()).orElseThrow(RuntimeException::new);
+            busTrip.setBus(bus);
+            busTripRepo.save(busTrip);
+
+        } finally {
+            writeLock.unlock();
+        }
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteBusTrip(String id) {
-        if (!busTripRepo.existsById(id)) {
-            throw new RuntimeException("Не найдено");
+        try {
+            writeLock.lock();
+
+            if (!busTripRepo.existsById(id)) {
+                throw new RuntimeException("Не найдено");
+            }
+            busTripRepo.deleteById(id);
+
+        } finally {
+            writeLock.unlock();
         }
-        busTripRepo.deleteById(id);
     }
 
     @Override
     public Collection<BusTrip> getBusTripsByDepartureDateAndDepartureStationAndArrivalStation(String date, String departureStation, String arrivalStation) {
-        Collection<BusTrip> result = busTripRepo.findAllByDepartureDateAndDepartureStationAndArrivalStation(Date.valueOf(date), departureStation, arrivalStation);
-        return result
-            .stream()
-            .filter(trip -> trip.getAvailableTicketCount() != 0)
-            .collect(Collectors.toList());
+        try {
+            readLock.lock();
+
+            Collection<BusTrip> result = busTripRepo.findAllByDepartureDateAndDepartureStationAndArrivalStation(Date.valueOf(date), departureStation, arrivalStation);
+            return result
+                .stream()
+                .filter(trip -> trip.getAvailableTicketCount() != 0)
+                .collect(Collectors.toList());
+
+        } finally {
+            readLock.unlock();
+        }
     }
 }
