@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
-public class BusCrudController {
+public class AdminBusCrudController {
     private final BusService busService;
 
     @Autowired
-    public BusCrudController(BusService busService) {
+    public AdminBusCrudController(BusService busService) {
         this.busService = busService;
     }
 
