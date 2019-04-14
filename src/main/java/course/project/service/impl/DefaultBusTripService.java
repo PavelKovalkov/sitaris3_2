@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @Service
 public class DefaultBusTripService implements BusTripService {
     private final BusTripRepo busTripRepo;
@@ -58,5 +62,14 @@ public class DefaultBusTripService implements BusTripService {
             throw new RuntimeException("Не найдено");
         }
         busTripRepo.deleteById(id);
+    }
+
+    @Override
+    public Collection<BusTrip> getBusTripsByDepartureDateAndDepartureStationAndArrivalStation(String date, String departureStation, String arrivalStation) {
+        Collection<BusTrip> result = busTripRepo.findAllByDepartureDateAndDepartureStationAndArrivalStation(Date.valueOf(date), departureStation, arrivalStation);
+        return result
+            .stream()
+            .filter(trip -> trip.getAvailableTicketCount() != 0)
+            .collect(Collectors.toList());
     }
 }

@@ -2,6 +2,8 @@ package course.project.service;
 
 import course.project.entity.BusTrip;
 
+import java.util.Collection;
+
 public interface BusTripService {
 
     BusTrip getBusTripInfo(String busTripId);
@@ -11,4 +13,8 @@ public interface BusTripService {
     void updateBusTrip(BusTrip busTrip);
 
     void deleteBusTrip(String id);
+
+    Collection<BusTrip> getBusTripsByDepartureDateAndDepartureStationAndArrivalStation(String date,
+                                                                                       String departureStation,
+                                                                                       String arrivalStation);
 }
