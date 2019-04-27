@@ -7,7 +7,7 @@
     <title>Title</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <style>
-         @import url('https://fonts.googleapis.com/css?family=Sniglet');
+        @import url('https://fonts.googleapis.com/css?family=Sniglet');
 
         body {
             margin: 0;
@@ -15,7 +15,7 @@
             font-family: 'Sniglet', cursive;
         }
 
-        .container{
+        .container {
             width: 80%;
             margin: 0 auto;
         }
@@ -24,7 +24,7 @@
             outline: none;
         }
 
-        p{
+        p {
             margin: 0;
         }
 
@@ -37,7 +37,7 @@
             top: 0;
         }
 
-         .links {
+        .links {
             float: right;
             margin-top: 20px;
         }
@@ -77,113 +77,144 @@
             height: 40px;
         }
 
-         #log-out{
+        #log-out {
             margin-right: 15px;
             margin-top: -15px;
         }
 
-        #log-out:hover{
-            color:#fff;
-            background-color:grey;
+        #log-out:hover {
+            color: #fff;
+            background-color: grey;
         }
 
-         #content {
+        #content {
             width: 100%;
             height: 1100px;
             padding-top: 70px;
         }
 
-        #inf{
+        #inf {
             height: 600px;
             padding-top: 25px;
-             background-image: url(/images/budapest-2253446_1280.jpg);
+            background-image: url(/images/budapest-2253446_1280.jpg);
             -webkit-background-size: cover;
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
         }
 
-        #intable{
+        #intable {
             width: 100%;
             height: 500px;
         }
 
         #zatemnenie {
-        background: rgba(102, 102, 102, 0.5);
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: none;
-      }
-         #okno {
-        width: 350px;
-        height: 250px;
-        text-align: center;
-        padding: 15px;
-        border: 3px solid black;
-        border-radius: 10px;
-        color: black;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        background: #fff;
-      }
-      
-      .close {
-        display: inline-block;
-        float: right;
-        border: 1px solid black;
-        color: black;
-        padding: 0 12px;
-        margin: 10px;
-        margin-right: -10px;
-        margin-top:-10px;
-        text-decoration: none;
-        background: #f2f2f2;
-        font-size: 14pt;
-        cursor:pointer;
-      }
-      .close:hover {background: #e6e6ff;}
+            background: rgba(102, 102, 102, 0.5);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
 
-      #okno input{
-        margin-top: 7px;
-      }
+        #okno {
+            width: 350px;
+            height: 250px;
+            text-align: center;
+            padding: 15px;
+            border: 3px solid black;
+            border-radius: 10px;
+            color: black;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            background: #fff;
+        }
 
-      #submit-psw, #ticket-button, #newpsw{
-         width: 140px;
-         font-weight: 700;
-         color: white;
-         border: 0;
-         text-decoration: none;
-         padding: .8em 1em calc(.8em + 3px);
-         border-radius: 3px;
-         background: black;
-         box-shadow: 0 -3px rgb(70, 107, 229) inset;
-         transition: 0.2s;
-         cursor: pointer;
-         height: 40px;
-      }
+        #zatemnenieResult {
+            background: rgba(102, 102, 102, 0.5);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
 
-       #newpsw, #ticket-button{
-        width: 140px;
-        background: rgb(64, 199, 129);
-        box-shadow: 0 -3px rgb(53, 167, 110) inset;
-      }
+        #result {
+            width: 300px;
+            height: 50px;
+            text-align: center;
+            padding: 15px;
+            border: 3px solid black;
+            border-radius: 10px;
+            color: black;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            background: #fff;
+        }
 
-      #ticket-button{
-        width: 220px;
-      }
+        .close {
+            display: inline-block;
+            float: right;
+            border: 1px solid black;
+            color: black;
+            padding: 0 12px;
+            margin: 10px;
+            margin-right: -10px;
+            margin-top: -10px;
+            text-decoration: none;
+            background: #f2f2f2;
+            font-size: 14pt;
+            cursor: pointer;
+        }
 
-      #newpsw:hover, #ticket-button:hover{
-         box-shadow: 0 -3px #00FF00 inset;
-      }
+        .close:hover {
+            background: #e6e6ff;
+        }
 
-       footer {
+        #okno input {
+            margin-top: 7px;
+        }
+
+        #submit-psw, #ticket-button, #newpsw {
+            width: 140px;
+            font-weight: 700;
+            color: white;
+            border: 0;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            background: black;
+            box-shadow: 0 -3px rgb(70, 107, 229) inset;
+            transition: 0.2s;
+            cursor: pointer;
+            height: 40px;
+        }
+
+        #newpsw, #ticket-button {
+            width: 140px;
+            background: rgb(64, 199, 129);
+            box-shadow: 0 -3px rgb(53, 167, 110) inset;
+        }
+
+        #ticket-button {
+            width: 220px;
+        }
+
+        #newpsw:hover, #ticket-button:hover {
+            box-shadow: 0 -3px #00FF00 inset;
+        }
+
+        footer {
             width: 100%;
             height: 70px;
             background-color: #C1CDC1;
@@ -196,99 +227,121 @@
             line-height: 2.2em;
         }
 
+        table {
+            border-collapse: collapse;
+            border: 0;
+            background-color: #C1CDC1;
+            display: none;
+        }
+
     </style>
 </head>
 <body>
-    <header>
-         <div class="links">
-            <ul>
-                <li><a href="http://localhost:8080/user/home">На главную</a></li>
-                <li>
-                    <form th:action="@{/user/logout}" method="post">
-                        <button type="submit" id="log-out">Выход</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </header>
+<header>
+    <div class="links">
+        <ul>
+            <li><a href="http://localhost:8080/user/home">На главную</a></li>
+            <li>
+                <form th:action="@{/user/logout}" method="post">
+                    <button type="submit" id="log-out">Выход</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</header>
 
 <section id="content">
 
 
+    <div id="inf">
 
-<div id="inf">
+        <div id="zatemnenie">
+            <div id="okno">
+                <a href="#" class="close" id="changePasForm">Х</a><br>
+                <h3>Смена пароля</h3>
+                <input type="text" id="oldPassword" placeholder="введите старый пароль"/><br>
+                <input type="password" id="newPassword" placeholder="введите новый пароль"/><br>
+                <input type="password" id="repeatedNewPassword" placeholder="повторите новый пароль"/><br>
+                <p class="note" style="color:red; display:none;"></p>
+                <input type="button" value="Сменить пароль" id="submit-psw" onclick="changePassword()"/>
+            </div>
+        </div>
+        <div id="zatemnenieResult">
+            <div id="result">
+                <a href="#" class="close" id="resultClose">Х</a><br>
+                <p class="resNote" style="color:black; display:none;"></p>
+            </div>
+        </div>
 
-<div id="zatemnenie">
-      <div id="okno">
-        <a href="#" class="close">Х</a><br>
-        <h3>Смена пароля</h3>
-       <input type="text" id="oldPassword" placeholder="введите старый пароль"/><br>
-       <input type="text" id="newPassword" placeholder="введите новый пароль"/><br>
-       <input type="text" id="repeatedNewPassword" placeholder="повторите новый пароль"/><br>
-       <p class="note" style="color:red; display:none;"></p>
-       <input type="button" value="Сменить пароль" id="submit-psw" onclick="changePassword()"/>
-      </div>
+
+        <button id="newpsw" style="margin-top: 220px;margin-left: 470px;">Смена пароля</button>
+        <input style="margin-left: 25px;" type="button" value="Забронированные билеты" id="ticket-button"
+               onclick="getNotUsedTickets()"/>
     </div>
 
+    <div id="intable">
 
+        <table border="1" id="tb">
+            <tr>
+                <th>Номер рейса</th>
+                <th>Номер автобуса</th>
+                <th>Станция отправления</th>
+                <th>Дата отправления</th>
+                <th>Время отправления</th>
+                <th>Станция прибытия</th>
+                <th>Дата прибытия</th>
+                <th>Время прибытия</th>
+                <th>Время в пути</th>
+                <th>Стоимость билета</th>
+                <th>ФИО</th>
+                <th>Номер пасспорта</th>
+            </tr>
+        </table>
 
-<button id="newpsw" style="margin-top: 220px;margin-left: 470px;">Смена пароля</button>
-<input style="margin-left: 25px;" type="button" value="Забронированные билеты" id="ticket-button" onclick="getNotUsedTickets()"/>
-
-</div>
-
-<div id="intable">
-    
-<table border="1" id="tb" style="display: none">
-    <tr>
-        <th>Номер рейса</th>
-        <th>Номер автобуса</th>
-        <th>Станция отправления</th>
-        <th>Дата отправления</th>
-        <th>Время отправления</th>
-        <th>Станция прибытия</th>
-        <th>Дата прибытия</th>
-        <th>Время прибытия</th>
-        <th>Время в пути</th>
-        <th>Стоимость билета</th>
-        <th>ФИО</th>
-        <th>Номер пасспорта</th>
-    </tr>
-</table>
-
-</div>
+    </div>
 
 </section>
 
 <footer>
-    <h1>&#169; All rights are reserved</h1>
+    <h1>&#169; Все права защищены</h1>
 </footer>
 <script th:inline="javascript">
-    
-    $('#newpsw').click(function(){
+
+    $('#newpsw').click(function () {
+        $("#oldPassword").val('');
+        $("#newPassword").val('');
+        $("#repeatedNewPassword").val('');
+        $('.note').css({"display": "none"});
         $('#zatemnenie').css({'display': 'block'});
     });
 
-     $('.close').click(function()
-                {
-                    $('#zatemnenie').css({"display":'none'});
-                });
-    
+    $('#changePasForm').click(function () {
+        $('#zatemnenie').css({"display": 'none'});
+    });
+
+    $('#resultClose').click(function () {
+        $('#zatemnenieResult').css({"display": 'none'});
+    });
+
+    function showResult(message) {
+        $('#zatemnenieResult').css({'display': 'block'});
+        $('.resNote').css({"display": "block"});
+        $('.resNote').html(message);
+    }
+
     function changePassword() {
         var oldPassword = $("#oldPassword").val();
         var newPassword = $("#newPassword").val();
         var repeatedNewPassword = $("#repeatedNewPassword").val();
 
-        if (oldPassword === "" && newPassword === "" && repeatedNewPassword === "") {
-           // alert("Введите все поля");
-            $('.note').css({"display":"block"});
+        if (oldPassword === "" || newPassword === "" || repeatedNewPassword === "") {
+            $('.note').css({"display": "block"});
             $('.note').html("Заполните все поля");
             return;
         }
 
         if (newPassword != repeatedNewPassword) {
-           // alert("Повторный ввод пароля не верный");
-            $('.note').css({"display":"block"});
+            $('.note').css({"display": "block"});
             $('.note').html("Пароли не совпадают");
             return;
         }
@@ -310,9 +363,11 @@
                 xhr.setRequestHeader(header, token);
             },
             success: function () {
-                alert("Успешно");
+                $('#zatemnenie').css({"display": 'none'});
+                showResult("Пароль был успешно изменен");
             }, error: function (error) {
-                alert("Ошибка");
+                $('.note').css({"display": "block"});
+                $('.note').html(error.responseText);
             }
         });
     }
@@ -324,7 +379,7 @@
             dataType: 'json',
             success: function (data) {
                 if (data.length === 0) {
-                    alert("Нет результата поиска");
+                    showResult("Нет результата поиска");
                     return;
                 }
 
@@ -340,11 +395,13 @@
                         <td>' + ticket.busTrip.arrivalTime + '</td>\
                         <td>' + ticket.busTrip.travelTime + '</td>\
                         <td>' + ticket.busTrip.ticketPrice + '</td>\
-                        <td>' + ticket.userName + ' ' +ticket.userSurname + ' ' + ticket.userPatronymic + '</td>\
+                        <td>' + ticket.userName + ' ' + ticket.userSurname + ' ' + ticket.userPatronymic + '</td>\
                         <td>' + ticket.passportId + '</td>\
                             </tr>');
                 });
                 $("#tb").css({"display": "table"});
+            },error: function (error) {
+                showResult(error.responseText);
             }
         });
     }

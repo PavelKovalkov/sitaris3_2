@@ -21,6 +21,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>sitaris3_2</finalName>
     </build>
 
     <parent>

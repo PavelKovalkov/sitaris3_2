@@ -214,7 +214,6 @@
 
         <div class="links">
             <ul>
-                <li><a href="">Link 1</a></li>
                 <li><a href="/user/userinfo">Личный кабинет</a></li>
                 <li>
                     <form th:action="@{/user/logout}" method="post">
@@ -251,7 +250,7 @@
         <div id="zatemnenie">
             <div id="okno">
                 <a href="#" class="close">Х</a><br>
-                Не все поля заполнены!
+                <p id="result" style="color:black;"></p>
             </div>
         </div>
     </div>
@@ -283,18 +282,22 @@
 </section>
 
 <footer>
-    <h1>&#169; All rights are reserved</h1>
+    <h1>&#169; Все права защищены</h1>
 </footer>
 
 <script>
+    function showResult(message) {
+        $('#zatemnenie').css({'display': 'block'});
+        $('#result').html(message);
+    }
+
     $(document).ready(function () {
+        $('.close').click(function () {
+            $('#zatemnenie').css({"display": 'none'});
+        });
         $("#search").click(function () {
             if ($("#from").val() === "" || $("#to").val() === "" || $("#date").val() === "") {
-                // alert("Поля для поиска не должны быть пустми");
-                $('#zatemnenie').css({'display': 'block'});
-                $('.close').click(function () {
-                    $('#zatemnenie').css({"display": 'none'});
-                });
+                showResult('Все поля должны быть заполненными');
                 return;
             }
             var url = "/user/bus-trip/get?date=" + $("#date").val() + "&departure_station=" + $("#from").val() + "&arrival_station=" + $("#to").val();
@@ -304,7 +307,7 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.length === 0) {
-                        alert("Нет результата поиска");
+                        showResult("Нет результата поиска");
                         return;
                     }
                     $.each(data, function (index, busTrip) {
@@ -325,6 +328,8 @@
                     $(".results").empty();
                     $("#tb").css({"display": "table"});
                     $("#table p").append(document.createTextNode("Найденные рейсы"));
+                },error: function (error) {
+                    showResult(error.responseText);
                 }
             });
         });
