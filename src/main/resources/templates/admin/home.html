@@ -4,55 +4,269 @@
     <meta charset="UTF-8">
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <title>Title</title>
+    <title>Редактирование</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<style>
+     @import url('https://fonts.googleapis.com/css?family=Sniglet');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Sniglet', cursive;
+        }
+
+        * {
+            outline: none;
+        }
+
+        h1{
+            text-align: center;
+        }
+
+        header {
+            width: 100%;
+            height: 70px;
+            background-color: #C1CDC1;
+            color: #fff;
+            position: fixed;
+            top: 0;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .links {
+            float: right;
+            margin-top: 20px;
+        }
+
+        ul {
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+            display: inline-block;
+            margin-left: 15px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        a:hover {
+            margin-bottom: 3px;
+            border-bottom: 1px solid #fff;
+        }
+        #log-out, #add-bus, #edit-bus, #delete-bus, #add-root, #edit-root {
+            width: 70px;
+            font-weight: 700;
+            color: white;
+            border: 0;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            background: rgb(64, 199, 129);
+            box-shadow: 0 -3px rgb(53, 167, 110) inset;
+            transition: 0.2s;
+            cursor: pointer;
+            height: 40px;
+        }
+        #add-bus, #edit-bus, #delete-bus, #add-root, #edit-root{
+            width: 200px
+        }
+        #delete-bus{
+            background-color:red;
+            box-shadow: 0 -3px black inset;
+        }
+        #delete-bus:hover{
+            box-shadow: 0 -3px red inset; 
+        }
+         #log-out{
+            margin-right: 15px;
+            margin-top: -15px;
+        }
+        #log-out:hover{
+            color:#fff;
+            background-color:grey;
+        }
+
+        input[type="button"]:hover {
+            opacity: 0.85;
+        }
+         #content {
+            width: 100%;
+            height: 800px;
+            padding-top: 70px;
+            background-color: #F1F1F2;
+        }
+        .blocks{
+         width: 80%;
+         margin:0 auto;
+        }
+        .newRoot, .editRoot{
+            padding:10px;
+            display: none;
+        }
+        .newRoot input, .editRoot input{
+            margin-bottom: 7px;
+        }
+        footer {
+            width: 100%;
+            height: 70px;
+            background-color: #C1CDC1;
+            color: #fff;
+            text-align: center;
+        }
+
+        footer h1 {
+            margin: 0;
+            line-height: 2.2em;
+        }
+
+         #zatemnenie, #zatemnenieError, #zatemnenieDelete, #zatemnenieEdit {
+        background: rgba(102, 102, 102, 0.5);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+      }
+         #okno, #oknoError, #oknoDelete, #oknoEdit {
+        width: 300px;
+        height: 200px;
+        text-align: center;
+        padding: 15px;
+        border: 3px solid black;
+        border-radius: 10px;
+        color: black;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        background: #fff;
+      }
+      #oknoError{
+        height:50px;
+      }
+      #oknoDelete{
+        height: 70px;
+      }
+       #okno input, #oknoEdit input{
+        margin-bottom: 7px;
+       }
+      .close, .closeError, .closeDelete, .closeEdit {
+        display: inline-block;
+        float: right;
+        border: 1px solid black;
+        color: black;
+        padding: 0 12px;
+        margin: 10px;
+        margin-right: -10px;
+        margin-top:-10px;
+        text-decoration: none;
+        background: #f2f2f2;
+        font-size: 14pt;
+        cursor:pointer;
+      }
+      .close:hover {background: #e6e6ff;}
+</style>
+
 </head>
 <body>
-<!-- Кнопка при нажатии всплывает окошко для добавления -->
-<div>
-<input type="button" value="Добавить автобус">
-</div>
-<!-- Кнопка при нажатии всплывает окошко для удаления -->
-<div>
-<input type="button" value="Удалить автобус">
-</div>
-<!-- Кнопка при нажатии всплывает окошко для редактирования -->
-<div>
-<input type="button" value="Редактировать автобус"/>
-</div>
 
-<!-- Содержимое всплывающего окошка для удаления-->
-<div>
+<header>
+    <div class="container">
+
+        <div class="links">
+            <ul>
+                <li><a href="">Link 1</a></li>
+                <li><a href="/user/userinfo">Личный кабинет</a></li>
+                <li>
+                    <form th:action="@{/user/logout}" method="post">
+                        <button type="submit" id="log-out">Выход</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</header>
+
+
+<section id="content">
+
+<div id="zatemnenie">
+      <div id="okno">
+        <p style="margin: 0;">Добавить автобус</p>
+        <a href="#" class="close">Х</a><br>
+<input type="text" id="busIdForSaving" placeholder="Номер автобуса" style="margin-left: 38px;"> <br>
+<input type="text" id="busModelForSaving" placeholder="Модель автобуса"/> <br>
+<input type="text" id="busCreationYearForSaving" placeholder="год выпуска"/> <br>
+<input type="text" id="busMileageForSaving" placeholder="Пробег"/> <br>
+<input type="button" onclick="saveBus()" value="Добавить"/>
+      </div>
+    </div>
+
+    <div id="zatemnenieDelete">
+      <div id="oknoDelete">
+        <p style="margin: 0;">Удалить автобус</p>
+        <a href="#" class="closeDelete">Х</a><br>
 <input type="text" id="busIdForRemoving" placeholder="Номер автобуса"/>
 <input type="button" onclick="removeBus()" value="Удалить"/>
-</div>
+      </div>
+    </div>
 
-<!-- Содержимое всплывающего окошка для добавления -->
-<div>
-<input type="text" id="busIdForSaving" placeholder="Номер автобуса"/>
-<input type="text" id="busModelForSaving" placeholder="Модель автобуса"/>
-<input type="text" id="busCreationYearForSaving" placeholder="год выпуска"/>
-<input type="text" id="busMileageForSaving" placeholder="Пробег"/>
-<input type="button" onclick="saveBus()" value="Добавить"/>
-</div>
-
-<!-- Окошко для редактирования, где надо выбрать номер автобуса для редактирования
-Далее всплывет новое окошко, где будет актуальная информация о автобусе-->
-<div>
-<input type="text" id="selectBusId" placeholder="номер автобуса для редактирования">
+    <div id="zatemnenieEdit">
+      <div id="oknoEdit">
+        <p style="margin: 0;">Редактировать автобус</p>
+        <a href="#" class="closeEdit">Х</a><br>
+<input type="text" id="selectBusId" placeholder="номер автобуса для редактирования" style="margin-left: 42px;"> <br>
 <input type="button" onclick="getBusInfo()" value="Выбрать">
-</div>
-
-<!--  Финальное окошко для редактирования  -->
-<div>
+<div class="editing" style="display: none;">
 <input type="text" id="busIdForEditing" placeholder="Номер автобуса" readonly/>
 <input type="text" id="busModelForEditing" placeholder="Модель автобуса"/>
 <input type="text" id="busCreationYearForEditing" placeholder="год выпуска"/>
 <input type="text" id="busMileageForEditing" placeholder="Пробег"/>
 <input type="button" onclick="updateBus()" value="Редактировать"/>
 </div>
+      </div>
+    </div>
 
-<div>
+    <div id="zatemnenieError">
+      <div id="oknoError" style="color: red;">
+        <a href="#" class="closeError">Х</a><br>
+        Не все поля заполнены!
+      </div>
+    </div>
+
+<div class="blocks">
+
+<h1>Редактирование автобусов</h1>
+
+<div style="margin-bottom: 30px;">
+<input type="button" value="Добавить автобус" id="add-bus">
+
+<input type="button" value="Удалить автобус" id="delete-bus">
+
+<input type="button" value="Редактировать автобус" id="edit-bus">
+</div>
+
+<h1>Редактирование рейсов</h1>
+
+<div style="margin-bottom: 30px;">
+    <input type="button" value="Добавить рейс" id="add-root">
+    <input type="button" value="Редактировать рейс" id="edit-root">
+</div>
+
+<div class="newRoot">
 <input type="text" id="busTripIdForSaving" placeholder="Номер рейса"/>
 <input type="text" id="busTripBusIdForSaving" placeholder="Номер автобуса"/>
 <input type="text" id="busTripDepartureStationForSaving" placeholder="станция отправления"/>
@@ -63,15 +277,13 @@
 <input type="text" id="busTripArrivalTimeForSaving" placeholder="время прибытия"/>
 <input type="text" id="busTripTravelTimeForSaving" placeholder="время в пути"/>
 <input type="text" id="busTripTicketCountForSaving" placeholder="количество билетов"/>
-<input type="text" id="busTripTicketPriceForSaving" placeholder="цена билета"/>
+<input type="text" id="busTripTicketPriceForSaving" placeholder="цена билета"/> <br>
 <input type="button" onclick="saveBusTrip()" value="Добавить"/>
 </div>
 
-<div>
-    <input type="text" id="selectBusTripId" placeholder="номер рейса для редактирования">
-    <input type="button" onclick="getBusTripInfo()" value="Выбрать">
-</div>
-
+<div class="editRoot">
+    <input type="text" id="selectBusTripId" placeholder="номер рейса для редактирования"> <br>
+    <input type="button" onclick="getBusTripInfo()" value="Выбрать"> <br>
 <div>
     <input type="text" id="busTripIdForEditing" placeholder="Номер рейса" readonly/>
     <input type="text" id="busTripBusIdForEditing" placeholder="Номер автобуса"/>
@@ -83,28 +295,85 @@
     <input type="text" id="busTripArrivalTimeForEditing" placeholder="время прибытия"/>
     <input type="text" id="busTripTravelTimeForEditing" placeholder="время в пути"/>
     <input type="text" id="busTripTicketCountForEditing" placeholder="количество билетов"/>
-    <input type="text" id="busTripTicketPriceForEditing" placeholder="цена билета"/>
+    <input type="text" id="busTripTicketPriceForEditing" placeholder="цена билета"/> <br>
     <input type="button" onclick="updateBusTrip()" value="Отредактировать"/>
 </div>
+</div>
+
+</div>
+</section>
+
+<footer>
+    <h1>&#169; All rights are reserved</h1>
+</footer>
 
 <!--<div>-->
     <!--<input type="text" id="busTripIdForRemoving" placeholder="Номер рейса"/>-->
     <!--<input type="button" onclick="removeBusTrip()" value="Удалить"/>-->
 <!--</div>-->
 
+<script>
+    $("#add-bus").click(function()
+    {
+        $('#zatemnenie').css({'display':'block'});
+        $('.close').click(function()
+                {
+                    $('#zatemnenie').css({"display":'none'});
+                });
+    });
+
+    $("#delete-bus").click(function()
+    {
+        $('#zatemnenieDelete').css({'display':'block'});
+        $('.closeDelete').click(function()
+                {
+                    $('#zatemnenieDelete').css({"display":'none'});
+                });
+    });
+
+    $("#edit-bus").click(function()
+    {
+        $('#zatemnenieEdit').css({'display':'block'});
+        $('.closeEdit').click(function()
+                {
+                    $('#zatemnenieEdit').css({"display":'none'});
+                });
+    });
+
+    $("#add-root").click(function()
+    {
+        $('.newRoot').css({'display':'block'});
+    });
+    $("#add-root").dblclick(function()
+    {
+        $('.newRoot').css({'display':'none'});
+    });
+
+    $("#edit-root").click(function()
+    {
+        $('.editRoot').css({'display':'block'});
+    });
+    $("#edit-root").dblclick(function()
+    {
+        $('.editRoot').css({'display':'none'});
+    });
+</script>
+
 <script th:inline="javascript">
     const token = [[${_csrf.token}]];
     const header = [[${_csrf.headerName}]];
-
     function getBusTripInfo() {
         var busTripId = $("#selectBusTripId").val();
         if (busTripId === "") {
-            alert("Номер рейса не может быть пустым");
+            $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                    $(".editRoot div").css({'display':'none'});
+                });
             return;
         }
-
         var url = "/admin/bus-trip/get-info/" + busTripId;
-
         $.ajax({
             type: "GET",
             url: url,
@@ -127,7 +396,6 @@
             }
         });
     }
-
     function updateBusTrip() {
         var id = $("#busTripIdForEditing");
         var busId = $("#busTripBusIdForEditing");
@@ -143,10 +411,13 @@
         if (id.val() === "" || busId.val() === "" || departureStation.val() === "" || arrivalStation.val() === ""
             || departureTime.val() === "" || arrivalTime.val() === "" || departureDate.val() === "" || arrivalDate.val() === ""
             || travelTime.val() === "" || ticketCount.val() === "" || ticketPrice.val() === "") {
-            alert("Заполните все поля");
+            $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                });
             return;
         }
-
         var busTrip = {
             "id": id.val(),
             "bus": busId.val(),
@@ -187,7 +458,6 @@
             }
         });
     }
-
     function saveBusTrip() {
         var id = $("#busTripIdForSaving");
         var busId = $("#busTripBusIdForSaving");
@@ -203,10 +473,13 @@
         if (id.val() === "" || busId.val() === "" || departureStation.val() === "" || arrivalStation.val() === ""
             || departureTime.val() === "" || arrivalTime.val() === "" || departureDate.val() === "" || arrivalDate.val() === ""
             || travelTime.val() === "" || ticketCount.val() === "" || ticketPrice.val() === "") {
-            alert("Заполните все поля");
+            $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                });
             return;
         }
-
         var busTrip = {
             "id": id.val(),
             "bus": busId.val(),
@@ -220,7 +493,6 @@
             "totalTicketCount": ticketCount.val(),
             "ticketPrice": ticketPrice.val()
         };
-
         $.ajax({
             type: "POST",
             url: "/admin/bus-trip/save",
@@ -248,17 +520,17 @@
             }
         });
     }
-
     function removeBusTrip() {
         var busId = $("#busTripIdForRemoving").val();
         if (busId === "") {
-            alert("Номер рейса не может быть пустым");
+            $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                });
             return;
         }
-
-
         var url = "/admin/bus-trip/delete?id=" + busId;
-
         $.ajax({
             method: "DELETE",
             url: url,
@@ -274,25 +546,25 @@
             }
         });
     }
-
     function updateBus() {
         var id = $("#busIdForEditing").val();
         var model = $("#busModelForEditing").val();
         var creationYear = $("#busCreationYearForEditing").val();
         var mileage = $("#busMileageForEditing").val();
-
         if (id === "" || model === "" || creationYear === "" || mileage === "") {
-            alert("Заполните все поля");
+           $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                });
             return;
         }
-
         var bus = {
             "id": id,
             "model": model,
             "creationYear": creationYear,
             "mileage": mileage
         };
-
         $.ajax({
             type: "PUT",
             url: "/admin/bus/update",
@@ -312,18 +584,19 @@
                 alert(error.responseText);
             }
         });
-
     }
-
     function getBusInfo() {
         var busId = $("#selectBusId").val();
         if (busId === "") {
-            alert("Номер автобуса не может быть пустым");
+            $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                });
             return;
         }
-
+        $(".editing").css({'display':'block'});
         var url = "/admin/bus/get-info/" + busId;
-
         $.ajax({
             type: "GET",
             url: url,
@@ -339,17 +612,17 @@
             }
         });
     }
-
     function removeBus() {
         var busId = $("#busIdForRemoving").val();
         if (busId === "") {
-            alert("Номер автобуса не может быть пустым");
+            $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                });
             return;
         }
-
-
         var url = "/admin/bus/delete?id=" + busId;
-
         $.ajax({
             method: "DELETE",
             url: url,
@@ -365,25 +638,25 @@
             }
         });
     }
-
     function saveBus() {
         var id = $("#busIdForSaving").val();
         var model = $("#busModelForSaving").val();
         var creationYear = $("#busCreationYearForSaving").val();
         var mileage = $("#busMileageForSaving").val();
-
         if (id === "" || model === "" || creationYear === "" || mileage === "") {
-            alert("ЗАполните все поля");
+            $('#zatemnenieError').css({'display':'block'});
+                $('.closeError').click(function()
+                {
+                    $('#zatemnenieError').css({"display":'none'});
+                });
             return;
         }
-
         var bus = {
             "id": id,
             "model": model,
             "creationYear": creationYear,
             "mileage": mileage
         };
-
         $.ajax({
             type: "POST",
             url: "/admin/bus/save",
