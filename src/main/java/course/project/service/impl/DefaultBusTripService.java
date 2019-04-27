@@ -2,6 +2,9 @@ package course.project.service.impl;
 
 import course.project.entity.Bus;
 import course.project.entity.BusTrip;
+import course.project.exception.BusDoesNotExistException;
+import course.project.exception.BusTripAlreadyExistException;
+import course.project.exception.BusTripDoesNotExistException;
 import course.project.repo.BusRepo;
 import course.project.repo.BusTripRepo;
 import course.project.service.BusTripService;
@@ -36,7 +39,7 @@ public class DefaultBusTripService implements BusTripService {
     public BusTrip getBusTripInfo(String busTripId) {
         try {
             readLock.lock();
-            return busTripRepo.findById(busTripId).orElseThrow(RuntimeException::new);
+            return busTripRepo.findById(busTripId).orElseThrow(BusTripDoesNotExistException::new);
 
         } finally {
             readLock.unlock();
@@ -49,11 +52,11 @@ public class DefaultBusTripService implements BusTripService {
         try {
             writeLock.lock();
             if (busTripRepo.existsById(busTrip.getId())) {
-                throw new RuntimeException("Уже существует");
+                throw new BusTripAlreadyExistException();
             }
 
             if (!busRepo.existsById(busTrip.getBus().getId())) {
-                throw new RuntimeException("Автобуса с данным номером не существует");
+                throw new BusTripDoesNotExistException();
             }
             busTripRepo.save(busTrip);
 
@@ -69,10 +72,10 @@ public class DefaultBusTripService implements BusTripService {
             writeLock.lock();
 
             if (!busTripRepo.existsById(busTrip.getId())) {
-                throw new RuntimeException("Не существует");
+                throw new BusTripDoesNotExistException();
             }
 
-            Bus bus = busRepo.findById(busTrip.getBus().getId()).orElseThrow(RuntimeException::new);
+            Bus bus = busRepo.findById(busTrip.getBus().getId()).orElseThrow(BusDoesNotExistException::new);
             busTrip.setBus(bus);
             busTripRepo.save(busTrip);
 
@@ -88,7 +91,7 @@ public class DefaultBusTripService implements BusTripService {
             writeLock.lock();
 
             if (!busTripRepo.existsById(id)) {
-                throw new RuntimeException("Не найдено");
+                throw new BusTripDoesNotExistException();
             }
             busTripRepo.deleteById(id);
 

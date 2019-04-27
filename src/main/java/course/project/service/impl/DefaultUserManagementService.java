@@ -1,10 +1,12 @@
 package course.project.service.impl;
 
 import course.project.entity.User;
+import course.project.exception.UnsuitablePasswordException;
 import course.project.exception.UserAlreadyExistException;
+import course.project.exception.UserDoesNotExistException;
 import course.project.repo.UserRepo;
 import course.project.service.PasswordEncoder;
-import course.project.service.UserManagmentService;
+import course.project.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,14 +15,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component
-public class DefaultUserManagmentService implements UserManagmentService {
+public class DefaultUserManagementService implements UserManagementService {
     private final PasswordEncoder encoder;
     private final UserRepo repo;
     private final Lock readLock;
     private final Lock writeLock;
 
     @Autowired
-    public DefaultUserManagmentService(PasswordEncoder encoder, UserRepo repo) {
+    public DefaultUserManagementService(PasswordEncoder encoder, UserRepo repo) {
         this.encoder = encoder;
         this.repo = repo;
         ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
@@ -55,12 +57,12 @@ public class DefaultUserManagmentService implements UserManagmentService {
         try {
             writeLock.lock();
 
-            User user = repo.findByEmail(email).orElseThrow(RuntimeException::new);
+            User user = repo.findByEmail(email).orElseThrow(UserDoesNotExistException::new);
 
             String encodedOldPassword = encoder.encodePassword(oldPassword);
 
             if (!user.getPassword().equals(encodedOldPassword)) {
-                throw new RuntimeException();
+                throw new UnsuitablePasswordException();
             }
 
             String encodedNewPassword = encoder.encodePassword(newPassword);

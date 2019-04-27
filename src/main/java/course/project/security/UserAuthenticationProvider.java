@@ -3,7 +3,7 @@ package course.project.security;
 import course.project.entity.User;
 import course.project.resource.Authority;
 import course.project.resource.UserPublicInfo;
-import course.project.service.UserManagmentService;
+import course.project.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,18 +19,18 @@ import java.util.Optional;
 @Component
 @Qualifier("user_provider")
 public class UserAuthenticationProvider implements AuthenticationProvider {
-    private final UserManagmentService userManagmentService;
+    private final UserManagementService userManagementService;
 
     @Autowired
-    public UserAuthenticationProvider(UserManagmentService userManagmentService) {
-        this.userManagmentService = userManagmentService;
+    public UserAuthenticationProvider(UserManagementService userManagementService) {
+        this.userManagementService = userManagementService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
-        Optional<User> user = userManagmentService.findUserByEmailAndPassword(email, password);
+        Optional<User> user = userManagementService.findUserByEmailAndPassword(email, password);
 
         if (user.isPresent()) {
             List<Authority> authorities = new ArrayList<>();

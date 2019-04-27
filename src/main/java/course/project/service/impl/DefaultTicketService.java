@@ -3,6 +3,8 @@ package course.project.service.impl;
 import course.project.entity.BusTrip;
 import course.project.entity.Ticket;
 import course.project.entity.User;
+import course.project.exception.NoAvailableTicketsException;
+import course.project.exception.UserDoesNotExistException;
 import course.project.repo.TicketRepo;
 import course.project.repo.UserRepo;
 import course.project.service.BusTripService;
@@ -39,7 +41,7 @@ public class DefaultTicketService implements TicketService {
     public Collection<Ticket> getNotUsedTickets(String userEmail) {
         try {
             readLock.lock();
-            User user = userRepo.findByEmail(userEmail).orElseThrow(RuntimeException::new);
+            User user = userRepo.findByEmail(userEmail).orElseThrow(UserDoesNotExistException::new);
 
             return user
                 .getTickets()
@@ -57,8 +59,8 @@ public class DefaultTicketService implements TicketService {
         JSONObject object = new JSONObject(jsonTicketInfo);
 
         BusTrip busTrip = busTripService.getBusTripInfo(object.getString("id"));
-        if (busTrip.getAvailableTicketCount() == 0) throw new RuntimeException();
-        User user = userRepo.findByEmail(object.getString("email")).orElseThrow(RuntimeException::new);
+        if (busTrip.getAvailableTicketCount() == 0) throw new NoAvailableTicketsException();
+        User user = userRepo.findByEmail(object.getString("email")).orElseThrow(UserDoesNotExistException::new);
 
         Ticket ticket = new Ticket();
         ticket.setBusTrip(busTrip);

@@ -2,7 +2,7 @@ package course.project.controller.user;
 
 import course.project.entity.User;
 import course.project.resource.UserPublicInfo;
-import course.project.service.UserManagmentService;
+import course.project.service.UserManagementService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,16 +17,16 @@ import javax.validation.Valid;
 
 @Controller
 public class UserProfileController {
-    private final UserManagmentService userManagmentService;
+    private final UserManagementService userManagementService;
 
     @Autowired
-    public UserProfileController(UserManagmentService userManagmentService) {
-        this.userManagmentService = userManagmentService;
+    public UserProfileController(UserManagementService userManagementService) {
+        this.userManagementService = userManagementService;
     }
 
     @PostMapping("/registration")
     public String registerUser(@RequestBody @Valid User user) {
-        userManagmentService.registerUser(user);
+        userManagementService.registerUser(user);
         return "user/login";
     }
 
@@ -36,7 +36,7 @@ public class UserProfileController {
         UserPublicInfo userInfo = (UserPublicInfo) session.getAttribute("userInfo");
         JSONObject object = new JSONObject(body);
 
-        userManagmentService.changePassword(userInfo.getEmail(), object.getString("old_password"), object.getString("new_password"));
+        userManagementService.changePassword(userInfo.getEmail(), object.getString("old_password"), object.getString("new_password"));
         return new ResponseEntity(HttpStatus.OK);
     }
 }

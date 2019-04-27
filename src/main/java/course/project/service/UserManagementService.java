@@ -4,7 +4,7 @@ import course.project.entity.User;
 
 import java.util.Optional;
 
-public interface UserManagmentService {
+public interface UserManagementService {
 
     void registerUser(User user);
 

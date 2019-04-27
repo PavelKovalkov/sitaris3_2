@@ -1,6 +1,8 @@
 package course.project.service.impl;
 
 import course.project.entity.Bus;
+import course.project.exception.BusAlreadyExistException;
+import course.project.exception.BusDoesNotExistException;
 import course.project.repo.BusRepo;
 import course.project.service.BusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class DefaultBusService implements BusService {
     public Bus getBusInfo(String busId) {
         try {
             readLock.lock();
-            return busRepo.findById(busId).orElseThrow(RuntimeException::new);
+            return busRepo.findById(busId).orElseThrow(BusDoesNotExistException::new);
         } finally {
             readLock.unlock();
         }
@@ -41,7 +43,7 @@ public class DefaultBusService implements BusService {
         try {
             writeLock.lock();
             if (busRepo.existsById(bus.getId())) {
-                throw new RuntimeException("Уже существует");
+                throw new BusAlreadyExistException();
             }
             busRepo.save(bus);
 
@@ -57,7 +59,7 @@ public class DefaultBusService implements BusService {
             writeLock.lock();
 
             if (!busRepo.existsById(bus.getId())) {
-                throw new RuntimeException("Не существует");
+                throw new BusDoesNotExistException();
             }
             busRepo.save(bus);
 
@@ -73,7 +75,7 @@ public class DefaultBusService implements BusService {
             writeLock.lock();
 
             if (!busRepo.existsById(id)) {
-                throw new RuntimeException("Не найдено");
+                throw new BusDoesNotExistException();
             }
             busRepo.deleteById(id);
 
