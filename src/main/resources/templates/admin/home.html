@@ -267,7 +267,7 @@
     <div id="zatemnenieError">
         <div id="oknoError" style="color: red;">
             <a href="#" class="closeError">Х</a><br>
-            Не все поля заполнены!
+            <p id="errorText"></p>
         </div>
     </div>
 
@@ -455,14 +455,20 @@
     const token = [[${_csrf.token}]];
     const header = [[${_csrf.headerName}]];
 
+    function showError(message) {
+        $('#zatemnenieError').css({'display': 'block'});
+        $("#errorText").html(message);
+    }
+
+    $('.closeError').click(function () {
+        $('#zatemnenieError').css({"display": 'none'});
+        $(".editRoot div").css({'display': 'none'});
+    });
+
     function getBusTripInfo() {
         var busTripId = $("#selectBusTripId").val();
         if (busTripId === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-                $(".editRoot div").css({'display': 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         var url = "/admin/bus-trip/get-info/" + busTripId;
@@ -484,7 +490,7 @@
                 $("#busTripTicketPriceForEditing").val(data.ticketPrice);
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
@@ -504,10 +510,7 @@
         if (id.val() === "" || busId.val() === "" || departureStation.val() === "" || arrivalStation.val() === ""
             || departureTime.val() === "" || arrivalTime.val() === "" || departureDate.val() === "" || arrivalDate.val() === ""
             || travelTime.val() === "" || ticketCount.val() === "" || ticketPrice.val() === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         var busTrip = {
@@ -543,10 +546,10 @@
                 travelTime.val('');
                 ticketCount.val('');
                 ticketPrice.val('');
-                alert("Отредактированно");
+                showError("Отредактировано");
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
@@ -566,10 +569,7 @@
         if (id.val() === "" || busId.val() === "" || departureStation.val() === "" || arrivalStation.val() === ""
             || departureTime.val() === "" || arrivalTime.val() === "" || departureDate.val() === "" || arrivalDate.val() === ""
             || travelTime.val() === "" || ticketCount.val() === "" || ticketPrice.val() === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         var busTrip = {
@@ -605,10 +605,10 @@
                 travelTime.val('');
                 ticketCount.val('');
                 ticketPrice.val('');
-                alert("Сохранено");
+                showError("Сохранено");
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
@@ -616,10 +616,7 @@
     function removeBusTrip() {
         var busId = $("#busTripIdForRemoving").val();
         if (busId === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         var url = "/admin/bus-trip/delete?id=" + busId;
@@ -631,10 +628,10 @@
             },
             success: function () {
                 $("#busTripIdForRemoving").val('');
-                alert("Удалено");
+                showError("Удалено");
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
@@ -645,10 +642,7 @@
         var creationYear = $("#busCreationYearForEditing").val();
         var mileage = $("#busMileageForEditing").val();
         if (id === "" || model === "" || creationYear === "" || mileage === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         var bus = {
@@ -670,10 +664,10 @@
                 $("#busModelForEditing").val('');
                 $("#busCreationYearForEditing").val('');
                 $("#busMileageForEditing").val('');
-                alert("Обновлено");
+                showError("Обновлено");
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
@@ -681,10 +675,7 @@
     function getBusInfo() {
         var busId = $("#selectBusId").val();
         if (busId === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         $(".editing").css({'display': 'block'});
@@ -700,7 +691,7 @@
                 $("#busMileageForEditing").val(data.mileage);
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
@@ -708,10 +699,7 @@
     function removeBus() {
         var busId = $("#busIdForRemoving").val();
         if (busId === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         var url = "/admin/bus/delete?id=" + busId;
@@ -723,10 +711,10 @@
             },
             success: function () {
                 $("#busIdForRemoving").val('');
-                alert("Удалено");
+                showError("Удалено");
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
@@ -737,10 +725,7 @@
         var creationYear = $("#busCreationYearForSaving").val();
         var mileage = $("#busMileageForSaving").val();
         if (id === "" || model === "" || creationYear === "" || mileage === "") {
-            $('#zatemnenieError').css({'display': 'block'});
-            $('.closeError').click(function () {
-                $('#zatemnenieError').css({"display": 'none'});
-            });
+            showError("Все поля должны быть заполнены");
             return;
         }
         var bus = {
@@ -762,10 +747,10 @@
                 $("#busModelForSaving").val('');
                 $("#busCreationYearForSaving").val('');
                 $("#busMileageForSaving").val('');
-                alert("Сохранено");
+                showError("Сохранено");
             },
             error: function (error) {
-                alert(error.responseText);
+                showError(error.responseText);
             }
         });
     }
