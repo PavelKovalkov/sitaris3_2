@@ -30,7 +30,7 @@ public class UserProfileController {
         return "user/login";
     }
 
-    @PostMapping
+    @PostMapping("/user/change-password")
     public @ResponseBody
     ResponseEntity changePassword(@RequestBody String body, HttpSession session) {
         UserPublicInfo userInfo = (UserPublicInfo) session.getAttribute("userInfo");
