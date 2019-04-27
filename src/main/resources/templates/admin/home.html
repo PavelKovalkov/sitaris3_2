@@ -360,8 +360,8 @@
 </script>
 
 <script th:inline="javascript">
-   // const token = [[${_csrf.token}]];
-   // const header = [[${_csrf.headerName}]];
+    const token = [[${_csrf.token}]];
+    const header = [[${_csrf.headerName}]];
     function getBusTripInfo() {
         var busTripId = $("#selectBusTripId").val();
         if (busTripId === "") {
