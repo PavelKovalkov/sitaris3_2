@@ -62,7 +62,7 @@
             margin-bottom: 3px;
             border-bottom: 1px solid #fff;
         }
-        #log-out, #add-bus, #edit-bus, #delete-bus, #add-root, #edit-root {
+        #log-out, #add-bus, #edit-bus, #delete-bus, #add-root, #edit-root, #delete-root {
             width: 70px;
             font-weight: 700;
             color: white;
@@ -76,14 +76,14 @@
             cursor: pointer;
             height: 40px;
         }
-        #add-bus, #edit-bus, #delete-bus, #add-root, #edit-root{
+        #add-bus, #edit-bus, #delete-bus, #add-root, #edit-root, #delete-root{
             width: 200px
         }
-        #delete-bus{
+        #delete-bus, #delete-root{
             background-color:red;
             box-shadow: 0 -3px black inset;
         }
-        #delete-bus:hover{
+        #delete-bus:hover, #delete-root:hover{
             box-shadow: 0 -3px red inset; 
         }
          #log-out{
@@ -100,7 +100,7 @@
         }
          #content {
             width: 100%;
-            height: 800px;
+            height: 1000px;
             padding-top: 70px;
             background-color: #F1F1F2;
         }
@@ -108,12 +108,17 @@
          width: 80%;
          margin:0 auto;
         }
-        .newRoot, .editRoot{
+        .newRoot, .editRoot, .deleteRoot{
             padding:10px;
             display: none;
+            float: left;
+            margin-right: 20px;
         }
-        .newRoot input, .editRoot input{
-            margin-bottom: 7px;
+        .newRoot p, .editRoot p, .deleteRoot p{
+            margin: 0;
+        }
+        .newRoot input, .editRoot input, .deleteRoot input{
+            margin-bottom: 5px;
         }
         footer {
             width: 100%;
@@ -263,42 +268,102 @@
 
 <div style="margin-bottom: 30px;">
     <input type="button" value="Добавить рейс" id="add-root">
+
+    <input type="button" value="Удалить рейс" id="delete-root">
+
     <input type="button" value="Редактировать рейс" id="edit-root">
 </div>
 
 <div class="newRoot">
-<input type="text" id="busTripIdForSaving" placeholder="Номер рейса"/>
-<input type="text" id="busTripBusIdForSaving" placeholder="Номер автобуса"/>
-<input type="text" id="busTripDepartureStationForSaving" placeholder="станция отправления"/>
-<input type="text" id="busTripArrivalStationForSaving" placeholder="станция прибытия"/>
-<input type="text" id="busTripDepartureDateForSaving" placeholder="дата отправления (yyyy-MM-dd)"/>
-<input type="text" id="busTripArrivalDateForSaving" placeholder="дата прибытия(yyyy-MM-dd)"/>
-<input type="text" id="busTripDepartureTimeForSaving" placeholder="время отправления"/>
-<input type="text" id="busTripArrivalTimeForSaving" placeholder="время прибытия"/>
-<input type="text" id="busTripTravelTimeForSaving" placeholder="время в пути"/>
-<input type="text" id="busTripTicketCountForSaving" placeholder="количество билетов"/>
-<input type="text" id="busTripTicketPriceForSaving" placeholder="цена билета"/> <br>
+    <h3>Добавление</h3>
+<p>
+    <label>Номер рейса:  <input type="text" id="busTripIdForSaving" placeholder="Номер рейса"/></label>
+</p> <br>
+<p>
+    <label>Номер автобуса: <input type="text" id="busTripBusIdForSaving" placeholder="Номер автобуса"/></label></p> <br>
+<p>
+<label>Станция отправления: <input type="text" id="busTripDepartureStationForSaving" placeholder="станция отправления"/></label>
+    </p> <br>
+<p>
+    <label>Станция прибытия:<input type="text" id="busTripArrivalStationForSaving" placeholder="станция прибытия"/></label>
+</p> <br>
+<p><label>Дата отправления:<input type="text" id="busTripDepartureDateForSaving" placeholder="дата отправления (yyyy-MM-dd)"/></label>
+</p> <br>
+<p>
+<label>Дата прибытия:<input type="text" id="busTripArrivalDateForSaving" placeholder="дата прибытия(yyyy-MM-dd)"/></label>
+</p> <br>
+<p>
+<label>Время отправления:<input type="text" id="busTripDepartureTimeForSaving" placeholder="время отправления"/></label>
+</p> <br>
+<p>
+    <label>Время прибытия:<input type="text" id="busTripArrivalTimeForSaving" placeholder="время прибытия"/></label>
+    </p> <br>
+<p>
+    <label>Время в пути:<input type="text" id="busTripTravelTimeForSaving" placeholder="время в пути"/></label>
+</p> <br>
+<p>
+<label>Количество билетов:<input type="text" id="busTripTicketCountForSaving" placeholder="количество билетов"/></label>
+</p> <br>
+<p>
+<label>Цена билета:<input type="text" id="busTripTicketPriceForSaving" placeholder="цена билета"/></label>
+</p> <br>
 <input type="button" onclick="saveBusTrip()" value="Добавить"/>
 </div>
 
+<div class="deleteRoot">
+    <h3>Удаление</h3>
+    <p>
+<label>Номер рейса:<input type="text" id="busTripIdForRemoving" placeholder="Номер рейса"/></label>
+</p> <br>
+<input type="button" onclick="removeBusTrip()" value="Удалить"/>   
+</div>
+
 <div class="editRoot">
-    <input type="text" id="selectBusTripId" placeholder="номер рейса для редактирования"> <br>
-    <input type="button" onclick="getBusTripInfo()" value="Выбрать"> <br>
+    <h3>Редактирование</h3>
+    <p>
+    <label>Номер рейса:
+    <input type="text" id="selectBusTripId" placeholder="номер рейса для редактирования"></label>
+    </p> <br>
+    <input type="button" onclick="getBusTripInfo()" value="Выбрать"> 
 <div>
-    <input type="text" id="busTripIdForEditing" placeholder="Номер рейса" readonly/>
-    <input type="text" id="busTripBusIdForEditing" placeholder="Номер автобуса"/>
-    <input type="text" id="busTripDepartureStationForEditing" placeholder="станция отправления"/>
-    <input type="text" id="busTripArrivalStationForEditing" placeholder="станция прибытия"/>
-    <input type="text" id="busTripDepartureDateForEditing" placeholder="дата отправления (yyyy-MM-dd)"/>
-    <input type="text" id="busTripArrivalDateForEditing" placeholder="дата прибытия(yyyy-MM-dd)"/>
-    <input type="text" id="busTripDepartureTimeForEditing" placeholder="время отправления"/>
-    <input type="text" id="busTripArrivalTimeForEditing" placeholder="время прибытия"/>
-    <input type="text" id="busTripTravelTimeForEditing" placeholder="время в пути"/>
-    <input type="text" id="busTripTicketCountForEditing" placeholder="количество билетов"/>
-    <input type="text" id="busTripTicketPriceForEditing" placeholder="цена билета"/> <br>
+    <p>
+    <label>Номер рейса:<input type="text" id="busTripIdForEditing" placeholder="Номер рейса" readonly/></label>
+    </p> <br>
+    <p>
+    <label>Номер автобуса:<input type="text" id="busTripBusIdForEditing" placeholder="Номер автобуса"/></label>
+    </p> <br>
+    <p>
+    <label>Станция отправления:<input type="text" id="busTripDepartureStationForEditing" placeholder="станция отправления"/></label>
+    </p> <br>
+    <p>
+    <label>Станция прибытия:<input type="text" id="busTripArrivalStationForEditing" placeholder="станция прибытия"/></label>
+    </p> <br>
+    <p>
+    <label>Дата отправления:<input type="text" id="busTripDepartureDateForEditing" placeholder="дата отправления (yyyy-MM-dd)"/></label>
+    </p> <br>
+    <p>
+    <label>Дата прибытия:<input type="text" id="busTripArrivalDateForEditing" placeholder="дата прибытия(yyyy-MM-dd)"/></label>
+    </p> <br>
+    <p>
+    <label>Время отправления:<input type="text" id="busTripDepartureTimeForEditing" placeholder="время отправления"/></label>
+    </p> <br>
+    <p>
+    <label>Время прибытия:<input type="text" id="busTripArrivalTimeForEditing" placeholder="время прибытия"/></label>
+    </p> <br>
+    <p>
+    <label>Время в пути:<input type="text" id="busTripTravelTimeForEditing" placeholder="время в пути"/></label>
+    </p> <br>
+    <p>
+    <label>Количество билетов:<input type="text" id="busTripTicketCountForEditing" placeholder="количество билетов"/></label>
+    </p> <br>
+    <p>
+    <label>Цена билета:<input type="text" id="busTripTicketPriceForEditing" placeholder="цена билета"/></label>
+    </p> <br>
     <input type="button" onclick="updateBusTrip()" value="Отредактировать"/>
 </div>
 </div>
+
+
 
 </div>
 </section>
@@ -307,10 +372,7 @@
     <h1>&#169; All rights are reserved</h1>
 </footer>
 
-<!--<div>-->
-    <!--<input type="text" id="busTripIdForRemoving" placeholder="Номер рейса"/>-->
-    <!--<input type="button" onclick="removeBusTrip()" value="Удалить"/>-->
-<!--</div>-->
+
 
 <script>
     $("#add-bus").click(function()
@@ -357,11 +419,20 @@
     {
         $('.editRoot').css({'display':'none'});
     });
+
+    $("#delete-root").click(function()
+    {
+        $('.deleteRoot').css({'display':'block'});
+    });
+    $("#delete-root").dblclick(function()
+    {
+        $('.deleteRoot').css({'display':'none'});
+    });
 </script>
 
 <script th:inline="javascript">
-    const token = [[${_csrf.token}]];
-    const header = [[${_csrf.headerName}]];
+   // const token = [[${_csrf.token}]];
+   // const header = [[${_csrf.headerName}]];
     function getBusTripInfo() {
         var busTripId = $("#selectBusTripId").val();
         if (busTripId === "") {
