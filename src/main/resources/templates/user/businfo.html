@@ -86,6 +86,16 @@
             margin: 0 auto;
         }
 
+        table{
+            border-collapse: collapse;
+            border: 2px solid lightgrey;
+        }
+  
+        td{
+            padding:10px;
+            background-color: #F1F1F1;
+        }
+
         #content div{
            margin-top: 20px;
            text-align: justify;
@@ -124,21 +134,31 @@
 
 <div class="container">
 
-<div th:text="${bus.id}">
-</div>
-<div th:text="${bus.model}">
-</div>
-<div th:text="${bus.creationYear}">
-</div>
-<div th:text="${bus.mileage}">
-</div>
+<table>
+    <tr>
+        <td>Номер автобуса</td>
+        <td th:text="${bus.id}"></td>
+    </tr>
+     <tr>
+        <td>Модель автобуса</td>
+        <td th:text="${bus.model}"></td>
+    </tr>
+     <tr>
+        <td>Дата выпуска</td>
+        <td  th:text="${bus.creationYear}"></td>
+    </tr>
+    <tr>
+        <td>Пробег</td>
+        <td  th:text="${bus.mileage}"></td>
+    </tr>
+</table>
 	
 </div>
 
 </section>
 
 <footer>
-	<h1>&#169; Все права защищены</h1>
+	<h1>&#169; All rights are reserved</h1>
 </footer>
 
 </body>
