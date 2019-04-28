@@ -7,11 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BusRepo extends CrudRepository<Bus, Long> {
+public interface BusRepo extends CrudRepository<Bus, String> {
 
     boolean existsById(String id);
 
     void deleteById(String id);
-
-    Optional<Bus> findById(String id);
 }

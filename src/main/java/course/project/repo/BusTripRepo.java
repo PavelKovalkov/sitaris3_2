@@ -9,14 +9,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Repository
-public interface BusTripRepo extends CrudRepository<BusTrip, Long> {
-
-    boolean existsById(String id);
-
-    void deleteById(String id);
-
-    Optional<BusTrip> findById(String id);
-
+public interface BusTripRepo extends CrudRepository<BusTrip, String> {
     Collection<BusTrip> findAllByDepartureDateAndDepartureStationAndArrivalStation(Date date,
                                                                                    String departureStation,
                                                                                    String arrivalStation);
