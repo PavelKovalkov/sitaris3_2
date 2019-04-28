@@ -97,17 +97,17 @@
 
     <div class="tabs">
         <input type="radio" name="inset" value="" id="tab_1" checked onclick="signInTab()">
-        <label for="tab_1">Sign In</label>
+        <label for="tab_1">Вход</label>
 
         <input type="radio" name="inset" value="" id="tab_2" onclick="signUpTab()">
-        <label for="tab_2">Sign Up</label>
+        <label for="tab_2">Регистрация</label>
 
         <div id="txt_1">
             <form th:action="@{/user/login}" method="post">
-                <h1>Sign In</h1>
+                <h1>Вход</h1>
                 <label><input type="email" id="sign-in-email" name="username" placeholder="Email"></label><br>
-                <label><input type="password" id="sign-in-psw" name="password" placeholder="Password"></label><br>
-                <input type="submit" id="button-in" value="Sign In">
+                <label><input type="password" id="sign-in-psw" name="password" placeholder="Пароль"></label><br>
+                <input type="submit" id="button-in" value="Вход">
             </form>
             <div id="signInError" style="display: none">
                 Неверный email или пароль
@@ -115,11 +115,11 @@
         </div>
 
         <div id="txt_2">
-            <h1>Sign Up</h1>
+            <h1>Регистрация</h1>
             <label><input type="email" id="sign-up-email" placeholder="Email"></label><br>
-            <label><input type="text" id="sign-up-login" placeholder="Username"></label><br>
-            <label><input type="password" id="sign-up-psw" placeholder="Password"></label><br>
-            <input type="button" id="button-up" value="Sign Up" onclick="signUp()">
+            <label><input type="text" id="sign-up-login" placeholder="Имя пользователя"></label><br>
+            <label><input type="password" id="sign-up-psw" placeholder="Пароль"></label><br>
+            <input type="button" id="button-up" value="Регистрация" onclick="signUp()">
             <div id="signUpError" style="display: none">
 
             </div>
@@ -154,6 +154,11 @@
             },
             error: function (error) {
                 $("#signUpError").html('');
+                if (error.responseJSON == undefined){
+                    $("#signUpError").append('<div>' + error.responseText + '</div>');
+                    $("#signUpError").css('display', 'block');
+                    return;
+                }
                 var errorsList = error.responseJSON;
                 for (var i = 0; i < errorsList.length; i++) {
                     $("#signUpError").append('<div>' + errorsList[i] + '</div>');

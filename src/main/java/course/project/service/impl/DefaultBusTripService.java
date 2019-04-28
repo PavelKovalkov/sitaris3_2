@@ -55,9 +55,8 @@ public class DefaultBusTripService implements BusTripService {
                 throw new BusTripAlreadyExistException();
             }
 
-            if (!busRepo.existsById(busTrip.getBus().getId())) {
-                throw new BusTripDoesNotExistException();
-            }
+            Bus bus = busRepo.findById(busTrip.getBus().getId()).orElseThrow(BusDoesNotExistException::new);
+            busTrip.setBus(bus);
             busTripRepo.save(busTrip);
 
         } finally {

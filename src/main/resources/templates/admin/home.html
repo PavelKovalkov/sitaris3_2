@@ -173,11 +173,15 @@
         }
 
         #oknoError {
-            height: 50px;
+            height: 100px;
         }
 
         #oknoDelete {
             height: 70px;
+        }
+
+        #oknoEdit {
+            height: 230px;
         }
 
         #okno input, #oknoEdit input {
@@ -259,7 +263,8 @@
                 <input type="text" id="busModelForEditing" placeholder="Модель автобуса"/>
                 <input type="text" id="busCreationYearForEditing" placeholder="год выпуска"/>
                 <input type="text" id="busMileageForEditing" placeholder="Пробег"/>
-                <input type="button" onclick="updateBus()" value="Редактировать"/>
+                <div><input type="button" onclick="updateBus()" value="Редактировать"/>
+                </div>
             </div>
         </div>
     </div>

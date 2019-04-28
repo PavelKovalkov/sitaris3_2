@@ -38,6 +38,7 @@ public class BusTripDeserializer extends StdDeserializer<BusTrip> {
         trip.setArrivalStation(node.get("arrivalStation").asText());
         trip.setAvailableTicketCount(0);
         trip.setTotalTicketCount(node.get("totalTicketCount").asInt());
+        trip.setAvailableTicketCount(node.get("totalTicketCount").asInt());
         trip.setTicketPrice(node.get("ticketPrice").asText());
         try {
             trip.setDepartureDate(new Date(dateFormat.parse(node.get("departureDate").asText()).getTime()));

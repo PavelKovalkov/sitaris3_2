@@ -301,6 +301,19 @@
                 return;
             }
             var url = "/user/bus-trip/get?date=" + $("#date").val() + "&departure_station=" + $("#from").val() + "&arrival_station=" + $("#to").val();
+            $("#tb").html('<tr>\n' +
+                '                    <th>Номер рейса</th>\n' +
+                '                    <th>Номер автобуса</th>\n' +
+                '                    <th>Станция отправления</th>\n' +
+                '                    <th>Дата отправления</th>\n' +
+                '                    <th>Время отправления</th>\n' +
+                '                    <th>Станция прибытия</th>\n' +
+                '                    <th>Дата прибытия</th>\n' +
+                '                    <th>Время прибытия</th>\n' +
+                '                    <th>Время в пути</th>\n' +
+                '                    <th>Количество свободных мест</th>\n' +
+                '                    <th>Стоимость билета</th>\n' +
+                '                </tr>');
             $.ajax({
                 type: "GET",
                 url: url,
