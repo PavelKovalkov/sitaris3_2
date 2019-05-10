@@ -71,7 +71,7 @@ public class DefaultTicketService implements TicketService {
         ticket.setPassportId(object.getString("passport"));
 
         busTrip.setAvailableTicketCount(busTrip.getAvailableTicketCount() - 1);
-        busTripService.saveBusTrip(busTrip);
+        busTripService.updateBusTrip(busTrip);
 
         writeLock.lock();
         ticketRepo.save(ticket);
